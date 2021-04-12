@@ -1,0 +1,24 @@
+{
+  "name": "pettake-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon -e js,graphql -w . -w .env app.js"
+  },
+  "author": "Yosep Ryan Agusta",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "faker": "^5.5.3"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.22.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "graphql": "^15.5.0",
+    "mongoose": "^5.12.3"
+  }
+}

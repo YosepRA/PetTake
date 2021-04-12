@@ -1,0 +1,29 @@
+{
+  "name": "pettake",
+  "version": "1.0.0",
+  "description": "Pet finder app built using MERN stack and GraphQL.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YosepRA/PetTake.git"
+  },
+  "author": "Yosep Ryan Agusta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YosepRA/PetTake/issues"
+  },
+  "homepage": "https://github.com/YosepRA/PetTake#readme",
+  "devDependencies": {
+    "@babel/core": "^7.13.15",
+    "@babel/eslint-parser": "^7.13.14",
+    "eslint": "^7.23.0"
+  },
+  "dependencies": {
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^2.2.1"
+  }
+}

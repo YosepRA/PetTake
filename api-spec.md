@@ -20,7 +20,8 @@ Written using per-page basis.
   preferHomeWithout: [String],
   health: [String],
   images: [String],
-  description: String
+  description: String,
+  author: User,
 }
 ```
 
@@ -39,6 +40,7 @@ Example:
   health: ['Vaccinated', 'Spayed/neutered'],
   images: ['/link/to/image1.png', '/link/to/image2.png']
   description: 'Nana is a good kid. She behaves well with your children to give them good memories.'
+  author: 'User' // User information object.
 }
 ```
 
