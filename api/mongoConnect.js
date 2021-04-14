@@ -5,6 +5,7 @@ function mongoConnect() {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false,
   });
   const dbConnection = mongoose.connection;
   dbConnection.on('error', () => console.error('Database connection error.'));
@@ -20,4 +21,4 @@ function mongoConnect() {
 
 // MongoDB connection.
 
-module.exports = { mongoConnect };
+module.exports = mongoConnect;

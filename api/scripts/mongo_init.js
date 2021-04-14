@@ -3,7 +3,7 @@ require('dotenv').config();
 /* eslint-disable import/no-extraneous-dependencies */
 const faker = require('faker');
 
-const { mongoConnect } = require('../mongoConnect');
+const mongoConnect = require('../mongoConnect');
 
 // Models
 const Pet = require('../models/Pet');

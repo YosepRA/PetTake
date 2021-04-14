@@ -1,13 +1,17 @@
+require('dotenv').config();
+
 const express = require('express');
 
+const startApolloServer = require('./apiHandler');
+const mongoConnect = require('./mongoConnect');
+
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.set('port', process.env.PORT || 3000);
+mongoConnect();
 
-app.get('/', async (req, res) => {
-  res.send('API server is running');
-});
+startApolloServer(app);
 
-app.listen(app.get('port'), () => {
-  console.log(`API server is listening on port ${app.get('port')}...`);
+app.listen(PORT, () => {
+  console.log(`API server is listening on port ${PORT}...`);
 });

@@ -1,0 +1,77 @@
+scalar GraphQLDate
+
+##### BASIC DATA TYPES #####
+
+type Pet {
+  _id: ID!
+  createdDate: GraphQLDate!
+  name: String!
+  breed: String!
+  age: String!
+  gender: String!
+  coatLength: String!
+  preferHomeWith: [String]
+  preferHomeWithout: [String]
+  health: [String]
+  images: [String!]!
+  description: String!
+  author: String!
+}
+
+type User {
+  username: String!
+  email: String!
+  name: String!
+  phone: String!
+  address: String!
+  pets: [Pet]
+}
+
+##### INPUT TYPES #####
+
+input PetInput {
+  name: String!
+  breed: String!
+  age: String!
+  gender: String!
+  coatLength: String!
+  preferHomeWith: [String]
+  preferHomeWithout: [String]
+  health: [String]
+  images: [String!]!
+  description: String!
+}
+
+input PetUpdateInput {
+  name: String
+  breed: String
+  age: String
+  gender: String
+  coatLength: String
+  preferHomeWith: [String]
+  preferHomeWithout: [String]
+  health: [String]
+  images: [String]
+  description: String
+}
+
+##### TOP LEVEL DECLARATION #####
+
+type Query {
+  petList(
+    breed: String
+    age: String
+    gender: String
+    coatLength: String
+    preferHomeWith: [String]
+    preferHomeWithout: [String]
+    health: [String]
+  ): [Pet!]!
+  pet(_id: ID!): Pet!
+}
+
+type Mutation {
+  petAdd(pet: PetInput!): Pet!
+  petUpdate(_id: ID!, changes: PetUpdateInput!): Pet!
+  petDelete(_id: ID!): Boolean!
+}
