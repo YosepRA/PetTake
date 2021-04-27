@@ -1,17 +1,5 @@
-require('dotenv').config();
-
 /* eslint-disable import/no-extraneous-dependencies */
-const faker = require('faker');
-
-const mongoConnect = require('../mongoConnect');
-
-// Models
-const Pet = require('../models/Pet');
-const User = require('../models/User');
-
-const { dbConnection } = mongoConnect();
-
-faker.seed(100);
+import faker from 'faker';
 
 const demoUser = {
   username: 'bigjoe',
@@ -58,7 +46,7 @@ function pickMultipleItems(amount, arr) {
   return randomizedArray;
 }
 
-function generatePets(amount, user) {
+function generatePets(amount) {
   const pets = [];
 
   for (let n = 0; n < amount; n += 1) {
@@ -83,7 +71,7 @@ function generatePets(amount, user) {
         images,
       ),
       description: faker.lorem.paragraph(5),
-      author: user,
+      author: demoUser,
     };
 
     pets.push(pet);
@@ -92,21 +80,4 @@ function generatePets(amount, user) {
   return pets;
 }
 
-async function mongoInit() {
-  // Remove all.
-  await Pet.deleteMany({});
-  await User.deleteMany({});
-
-  const user = await User.create(demoUser);
-  const pets = generatePets(5, user);
-  const createdPets = await Pet.create(pets);
-  console.log(
-    `Successful data initialization with ${createdPets.length} pets.`,
-  );
-
-  // Insert pets references to user.
-  user.pets = createdPets;
-  await user.save();
-}
-
-mongoInit().then(() => dbConnection.close());
+export default generatePets;

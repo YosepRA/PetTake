@@ -1,0 +1,106 @@
+$main-color: #7eb8da;
+$secondary-color: #6fa2bf;
+$main-black: #404040;
+$light-grey: #cccccc;
+
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin main-button {
+  background-color: $main-color;
+  border: 1px solid $main-color;
+  color: white;
+  transition: all 200ms ease-out;
+
+  &:hover,
+  &:focus,
+  &:not(:disabled):not(.disabled):active {
+    background-color: $secondary-color;
+    border: 1px solid $secondary-color;
+    color: white;
+    box-shadow: none;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  &:not(:disabled):not(.disabled):active {
+    background-color: darken($secondary-color, 10);
+  }
+}
+
+@mixin light-button {
+  background-color: white;
+  border: 1px solid $light-grey;
+  color: $main-black;
+  transition: all 200ms ease-out;
+
+  &:hover,
+  &:focus,
+  &:not(:disabled):not(.disabled):active {
+    background-color: #eee;
+    border: 1px solid $light-grey;
+    color: $main-black;
+    box-shadow: none;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  &:not(:disabled):not(.disabled):active {
+    background-color: #ddd;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Open+Sans:wght@300;400&display=swap');
+
+@font-face {
+  font-family: 'Blueberry Regular';
+  // src: local('Blueberry Regular'),
+  //   url('/fonts/Blueberry-Regular.otf') format('opentype');
+  src: local('Blueberry Regular');
+}
+
+// BREAKPOINTS
+// Extra small devices (portrait phones, less than 576px)
+// No media query for `xs` since this is the default in Bootstrap
+@mixin breakpoint-up($size) {
+  @if $size == sm {
+    // Small devices (landscape phones, 576px and up)
+    @media (min-width: 576px) {
+      @content;
+    }
+  } @else if $size == md {
+    // Medium devices (tablets, 768px and up)
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $size == lg {
+    // Large devices (desktops, 992px and up)
+    @media (min-width: 992px) {
+      @content;
+    }
+  } @else if $size == xl {
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 1200px) {
+      @content;
+    }
+  }
+}
+
+@mixin Comfortaa {
+  font-family: 'Comfortaa', 'Open Sans', sans-serif;
+}
+
+@mixin OpenSans {
+  font-family: 'Open Sans', sans-serif;
+}
+
+@mixin Blueberry {
+  font-family: 'Blueberry Regular', sans-serif;
+}

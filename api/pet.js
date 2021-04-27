@@ -10,7 +10,7 @@ const demoUser = { username: 'bigjoe' };
 
 async function list(
   _,
-  { preferHomeWith, preferHomeWithout, health, ...filterRest }
+  { preferHomeWith, preferHomeWithout, health, ...filterRest },
 ) {
   const filter = { ...filterRest };
 

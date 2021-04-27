@@ -1,0 +1,19 @@
+{
+  "env": {
+    "browser": true
+  },
+  "extends": ["react-app", "react-app/jest", "airbnb"],
+  "rules": {
+    "arrow-parens": ["error", "always"],
+    "implicit-arrow-linebreak": "off",
+    "object-curly-newline": "off",
+    "no-param-reassign": "off",
+    "react/prop-types": "off",
+    "react/jsx-one-expression-per-line": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

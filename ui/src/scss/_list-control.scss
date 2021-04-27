@@ -1,0 +1,91 @@
+@import './config';
+
+.list-control {
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid $light-grey;
+
+  &__dropdown {
+    display: inline-block;
+  }
+
+  &__btn {
+    display: inline-block;
+    min-width: 70px;
+    margin-right: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    @include light-button();
+    font-size: 0.9rem;
+  }
+
+  &__menu {
+    padding: 1rem;
+
+    &--filter {
+      width: 260px;
+    }
+
+    &-control {
+      margin-top: 1rem;
+    }
+
+    &-btn {
+      width: 100%;
+
+      &:not(:nth-child(2)) {
+        margin-bottom: 0.5rem;
+      }
+
+      &--apply {
+        @include main-button();
+      }
+
+      &--reset {
+        @include light-button();
+      }
+    }
+  }
+}
+
+// ===== BREAPOINTS =====
+
+@include breakpoint-up(sm) {
+  .list-control {
+    &__menu {
+      &--filter {
+        width: 300px;
+      }
+    }
+  }
+}
+
+@include breakpoint-up(md) {
+  .list-control {
+    &__menu {
+      padding: 1.2rem 1.4rem;
+
+      &--filter {
+        width: 400px;
+      }
+    }
+  }
+}
+
+@include breakpoint-up(lg) {
+  .list-control {
+    &__btn {
+      min-width: 90px;
+      padding: 0.375rem 0.75rem;
+      margin-right: 1rem;
+      font-size: 1rem;
+    }
+
+    &__menu {
+      padding: 1.4rem 1.8rem;
+
+      &--filter {
+        width: 600px;
+      }
+    }
+  }
+}
