@@ -1,0 +1,58 @@
+@import './config';
+
+.pet-details {
+  .pet-carousel {
+    margin-bottom: 1.6rem;
+
+    &__item {
+      height: 340px;
+      background-color: rgba(black, 0.8);
+      text-align: center;
+    }
+
+    &__image {
+      height: 100%;
+      width: auto;
+      object-fit: cover;
+    }
+  }
+
+  .name {
+    margin-bottom: 0.9rem;
+    @include Comfortaa();
+    font-size: 2rem;
+    // font-weight: 400;
+  }
+
+  .section-header {
+    margin-bottom: 0.9rem;
+    font-size: 1.7rem;
+    font-weight: 300;
+  }
+
+  .info-section {
+    margin-bottom: 2.4rem;
+  }
+
+  .data-section {
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    gap: 0.5rem;
+
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+// ===== BREAKPOINTS =====
+
+@include breakpoint-up(lg) {
+  .pet-details {
+    .main-container {
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}

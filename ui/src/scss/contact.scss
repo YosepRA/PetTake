@@ -1,0 +1,79 @@
+@import './config';
+
+.contact {
+  .section-header {
+    margin-bottom: 0.6rem;
+    font-size: 1.3rem;
+  }
+
+  .information {
+    margin-bottom: 2rem;
+
+    &__intro {
+      margin-bottom: 0.5rem;
+    }
+
+    &__contact {
+      &-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      &-item {
+        display: grid;
+        grid-template-columns: 25px 1fr;
+        align-items: center;
+      }
+
+      &-icon {
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .form {
+    &__field {
+      &--message {
+        height: 130px;
+      }
+    }
+
+    &__btn {
+      display: inline-block;
+      width: 100px;
+      margin-right: 1rem;
+
+      &--submit {
+        @include main-button();
+      }
+
+      &--cancel {
+        @include light-button();
+      }
+    }
+  }
+}
+
+// ===== BREAKPOINTS =====
+
+@include breakpoint-up(md) {
+  .contact {
+    .section-header {
+      margin-bottom: 0.8rem;
+    }
+
+    .information {
+      &__intro {
+        margin-bottom: 0.8rem;
+      }
+    }
+  }
+}
+
+@include breakpoint-up(lg) {
+  .contact {
+    .row {
+      justify-content: center;
+    }
+  }
+}

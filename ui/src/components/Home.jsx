@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import '../css/home.min.css';
 
@@ -7,46 +7,56 @@ import ListControl from './ListControl';
 import PetCard from './PetCard';
 import Pagination from './Pagination';
 
-export default function PetList() {
-  const pets = generatePets(5);
+export default class PetList extends Component {
+  componentDidMount() {
+    document.body.classList.add('home');
+  }
 
-  const createPetItems = (petArray) =>
-    petArray.map((pet) => (
-      <Col key={pet.name} sm="6" md="4">
-        <PetCard pet={pet} />
-      </Col>
-    ));
+  componentWillUnmount() {
+    document.body.classList.remove('home');
+  }
 
-  return (
-    <main className="main-container">
-      <section className="hero">
-        <h2 className="hero__catchphrase">
-          <strong>Your Pet Buddy</strong> is
-        </h2>
-        <h2 className="hero__catchphrase">waiting for you</h2>
-      </section>
+  render() {
+    const pets = generatePets(5);
 
-      <section className="pet-list">
-        <Container>
-          <Row>
-            <Col>
-              <h1 className="pet-list__title">Find Your Pet</h1>
-            </Col>
-          </Row>
+    const createPetItems = (petArray) =>
+      petArray.map((pet) => (
+        <Col key={pet.name} sm="6" md="4">
+          <PetCard pet={pet} />
+        </Col>
+      ));
 
-          <Row>
-            <Col>
-              <ListControl />
-            </Col>
-          </Row>
+    return (
+      <main className="main-container">
+        <section className="hero">
+          <h2 className="hero__catchphrase">
+            <strong>Your Pet Buddy</strong> is
+          </h2>
+          <h2 className="hero__catchphrase">waiting for you</h2>
+        </section>
 
-          <div className="pet-list__items">
-            <Row>{createPetItems(pets)}</Row>
-          </div>
+        <section className="pet-list">
+          <Container>
+            <Row>
+              <Col>
+                <h1 className="pet-list__title">Find Your Pet</h1>
+              </Col>
+            </Row>
 
-          <Pagination currentPage={1} totalPage={42} />
-        </Container>
-      </section>
-    </main>
-  );
+            <Row>
+              <Col>
+                <ListControl />
+              </Col>
+            </Row>
+
+            <div className="pet-list__items">
+              <Row>{createPetItems(pets)}</Row>
+            </div>
+
+            <Pagination currentPage={1} totalPage={42} />
+          </Container>
+        </section>
+      </main>
+    );
+  }
 }
