@@ -5,6 +5,8 @@ import { Container } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import UserModal from './UserModal';
+
 export default class MainNavbar extends Component {
   constructor() {
     super();
@@ -42,15 +44,8 @@ export default class MainNavbar extends Component {
 
   createLinks = (links) =>
     links.map(({ label, props }) => {
-      const { to, exact, className } = props;
       return (
-        <NavLink
-          key={label}
-          to={to}
-          exact={exact}
-          className={className}
-          onClick={() => this.toggleMenu(false)}
-        >
+        <NavLink {...props} key={label} onClick={() => this.toggleMenu(false)}>
           {label}
         </NavLink>
       );
@@ -97,19 +92,7 @@ export default class MainNavbar extends Component {
                 <div className="navbar__menu-pages">{pagesLinks}</div>
 
                 <div className="navbar__menu-user">
-                  <button
-                    type="button"
-                    className="navbar__menu-item navbar__menu-button"
-                  >
-                    Login
-                  </button>
-
-                  <button
-                    type="button"
-                    className="navbar__menu-item navbar__menu-button"
-                  >
-                    Register
-                  </button>
+                  <UserModal />
                 </div>
               </section>
             </Container>
