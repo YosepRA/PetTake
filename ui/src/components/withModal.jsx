@@ -5,7 +5,7 @@ export default function withModal(WrappedComponent) {
     constructor() {
       super();
       this.state = {
-        isOpen: true,
+        isOpen: false,
       };
     }
 

@@ -29,6 +29,13 @@ export default class MainNavbar extends Component {
           className: 'navbar__menu-item navbar__menu-link',
         },
       },
+      {
+        label: 'User (remove later)',
+        props: {
+          to: '/user',
+          className: 'navbar__menu-item navbar__menu-link',
+        },
+      },
     ];
   }
 
@@ -43,13 +50,11 @@ export default class MainNavbar extends Component {
   };
 
   createLinks = (links) =>
-    links.map(({ label, props }) => {
-      return (
-        <NavLink {...props} key={label} onClick={() => this.toggleMenu(false)}>
-          {label}
-        </NavLink>
-      );
-    });
+    links.map(({ label, props }) => (
+      <NavLink {...props} key={label} onClick={() => this.toggleMenu(false)}>
+        {label}
+      </NavLink>
+    ));
 
   render() {
     const { isOpen } = this.state;

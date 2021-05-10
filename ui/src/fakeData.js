@@ -51,6 +51,7 @@ function generatePets(amount) {
 
   for (let n = 0; n < amount; n += 1) {
     const pet = {
+      _id: 123,
       createdDate: faker.date.recent(10, new Date()),
       name: faker.name.lastName(),
       breed: faker.helpers.randomize(breeds),

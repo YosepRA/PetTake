@@ -1,6 +1,8 @@
 @import './config';
 
 .list-control {
+  display: flex;
+  justify-content: space-between;
   padding-bottom: 0.8rem;
   margin-bottom: 0.8rem;
   border-bottom: 1px solid $light-grey;
@@ -12,10 +14,17 @@
   &__btn {
     display: inline-block;
     min-width: 70px;
-    margin-right: 0.5rem;
     padding: 0.3rem 0.5rem;
     @include light-button();
     font-size: 0.9rem;
+
+    &:not(.list-control__btn--new) {
+      margin-right: 0.5rem;
+    }
+
+    &--new {
+      @include main-button();
+    }
   }
 
   &__menu {

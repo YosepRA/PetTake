@@ -1,0 +1,9 @@
+@import './config';
+
+.page-user {
+  .user {
+    &-nav {
+      margin-bottom: 1.4rem;
+    }
+  }
+}

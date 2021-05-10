@@ -3,9 +3,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default function Pagination({ currentPage, totalPage }) {
+export default function Pagination({ currentPage, totalPage, className }) {
   return (
-    <section className="pagination">
+    <div className={`pagination ${className}`}>
       <Link to="/" className="btn btn-primary pagination__btn" title="First">
         <span className="pagination__icon pagination__icon--double">
           <FontAwesomeIcon icon="chevron-left" />
@@ -39,6 +39,6 @@ export default function Pagination({ currentPage, totalPage }) {
         </span>
         <span className="pagination__text">Last</span>
       </Link>
-    </section>
+    </div>
   );
 }

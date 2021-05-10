@@ -36,11 +36,11 @@ function arrayToCommaString(array) {
 
 export default class PetDetails extends Component {
   componentDidMount() {
-    document.body.classList.add('pet-details');
+    document.body.classList.add('page-pet-details');
   }
 
   componentWillUnmount() {
-    document.body.classList.remove('pet-details');
+    document.body.classList.remove('page-pet-details');
   }
 
   render() {

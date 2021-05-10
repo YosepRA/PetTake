@@ -51,11 +51,11 @@ function createFormFields(data) {
 
 export default class Contact extends Component {
   componentDidMount() {
-    document.body.classList.add('contact');
+    document.body.classList.add('page-contact');
   }
 
   componentWillUnmount() {
-    document.body.classList.remove('contact');
+    document.body.classList.remove('page-contact');
   }
 
   handleSubmit = (values) => {

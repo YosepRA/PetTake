@@ -1,6 +1,6 @@
 @import './config';
 
-.pet-details {
+.page-pet-details {
   .pet-carousel {
     margin-bottom: 1.6rem;
 
@@ -48,7 +48,7 @@
 // ===== BREAKPOINTS =====
 
 @include breakpoint-up(lg) {
-  .pet-details {
+  .page-pet-details {
     .main-container {
       max-width: 900px;
       margin-left: auto;

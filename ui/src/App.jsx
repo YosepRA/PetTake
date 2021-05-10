@@ -16,15 +16,22 @@ import {
   faSortAlphaDown,
   faChevronLeft,
   faChevronRight,
+  faPlus,
+  faEdit,
+  faTrash,
+  faCog,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import './css/main.min.css';
 
+import ScrollToTop from './components/ScrollToTop';
 import MainNavbar from './components/MainNavbar';
 import Home from './components/Home';
 import PetDetails from './components/PetDetails';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import UserSwitch from './components/user/UserSwitch';
+import PetForm from './components/user/PetForm';
 
 // Fontawesome global library build up.
 library.add(
@@ -36,6 +43,10 @@ library.add(
   faSortAlphaDown,
   faChevronLeft,
   faChevronRight,
+  faPlus,
+  faEdit,
+  faTrash,
+  faCog,
   faEnvelope,
 );
 
@@ -43,12 +54,18 @@ export default function App() {
   return (
     <div>
       <Router>
+        <ScrollToTop />
+
         <MainNavbar />
 
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/pet/:id" component={PetDetails} />
           <Route path="/contact" component={Contact} />
+
+          <Redirect exact from="/user" to="/user/pet" />
+          <Route path="/user/pet/:mode" component={PetForm} />
+          <Route path="/user" component={UserSwitch} />
 
           <Redirect to="/" />
         </Switch>

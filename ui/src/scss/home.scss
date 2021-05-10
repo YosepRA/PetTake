@@ -1,7 +1,10 @@
 @import './config';
-@import './list-control';
 
-.home {
+.page-home {
+  @import './list-control';
+  @import './pet-card';
+  @import './pagination';
+
   .main-container {
     margin-top: 0;
   }
@@ -34,17 +37,15 @@
       margin-bottom: 1.5rem;
     }
   }
+}
 
-  @import './pet-card';
+// ===== BREAKPOINTS =====
 
-  // ===== BREAKPOINTS =====
-
-  @include breakpoint-up(md) {
-    .home {
-      .pet-list {
-        &__items {
-          margin-bottom: 2rem;
-        }
+@include breakpoint-up(md) {
+  .page-home {
+    .pet-list {
+      &__items {
+        margin-bottom: 2rem;
       }
     }
   }

@@ -1,0 +1,7 @@
+@import './config';
+
+.page-user-pet-list {
+  @import './list-control';
+  @import './pet-card';
+  @import './pagination';
+}

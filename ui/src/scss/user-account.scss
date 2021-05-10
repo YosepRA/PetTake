@@ -1,0 +1,129 @@
+@import './config';
+
+.page-user-account {
+  .user-account {
+    .section-header {
+      margin-bottom: 0.9rem;
+    }
+
+    .section-title {
+      margin-bottom: 0.4rem;
+      font-size: 1.4rem;
+    }
+
+    .field {
+      &__input {
+        &--textarea {
+          height: 110px;
+        }
+      }
+    }
+
+    &__section {
+      margin-bottom: 2rem;
+      max-width: 400px;
+    }
+
+    &__basic {
+      &-mode-toggle {
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        font-size: 0.8rem;
+      }
+
+      &-view {
+        .field {
+          display: grid;
+          grid-template-columns: 25% 1fr;
+          margin-bottom: 1rem;
+        }
+      }
+    }
+
+    &__form-control {
+      margin-top: 1.4rem;
+    }
+
+    &__form-btn {
+      margin-right: 1rem;
+      width: 100px;
+
+      &--primary {
+        @include main-button();
+      }
+
+      &--light {
+        @include light-button();
+      }
+    }
+  }
+}
+
+// ===== Breakpoints =====
+
+@include breakpoint-up(md) {
+  .page-user-account {
+    .user-account {
+      .section-header {
+        margin-bottom: 1.4rem;
+      }
+
+      .field {
+        display: grid;
+        grid-template-columns: 30% 1fr;
+        gap: 0.5rem;
+        align-items: center;
+
+        &--address {
+          align-items: start;
+        }
+      }
+
+      &__section {
+        max-width: 500px;
+        margin-bottom: 4rem;
+      }
+
+      &__basic {
+        &-header {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        &-view {
+          .field {
+            grid-template-columns: 15% 1fr;
+          }
+        }
+      }
+
+      &__form-control {
+        margin-top: 0;
+      }
+
+      &__form-btn {
+        width: 130px;
+      }
+    }
+  }
+}
+
+@include breakpoint-up(lg) {
+  .page-user-account {
+    .user-account {
+      &__section {
+        max-width: 600px;
+      }
+    }
+  }
+}
+@include breakpoint-up(xl) {
+  .page-user-account {
+    .user-account {
+      &__section {
+        max-width: 700px;
+      }
+    }
+  }
+}
