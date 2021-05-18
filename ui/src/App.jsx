@@ -20,6 +20,7 @@ import {
   faEdit,
   faTrash,
   faCog,
+  faCamera,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import './css/main.min.css';
@@ -47,6 +48,7 @@ library.add(
   faEdit,
   faTrash,
   faCog,
+  faCamera,
   faEnvelope,
 );
 

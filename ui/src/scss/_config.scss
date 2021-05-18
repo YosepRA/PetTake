@@ -3,6 +3,42 @@ $secondary-color: #6fa2bf;
 $main-black: #404040;
 $light-grey: #cccccc;
 
+// @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Open+Sans:wght@300;400&display=swap');
+
+@font-face {
+  font-family: 'Blueberry Regular';
+  // src: local('Blueberry Regular'),
+  //   url('/fonts/Blueberry-Regular.otf') format('opentype');
+  src: local('Blueberry Regular');
+}
+
+// BREAKPOINTS
+// Extra small devices (portrait phones, less than 576px)
+// No media query for `xs` since this is the default in Bootstrap
+@mixin breakpoint-up($size) {
+  @if $size == sm {
+    // Small devices (landscape phones, 576px and up)
+    @media (min-width: 576px) {
+      @content;
+    }
+  } @else if $size == md {
+    // Medium devices (tablets, 768px and up)
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $size == lg {
+    // Large devices (desktops, 992px and up)
+    @media (min-width: 992px) {
+      @content;
+    }
+  } @else if $size == xl {
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 1200px) {
+      @content;
+    }
+  }
+}
+
 @mixin flexCenter {
   display: flex;
   justify-content: center;
@@ -57,41 +93,42 @@ $light-grey: #cccccc;
   }
 }
 
-// @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Open+Sans:wght@300;400&display=swap');
-
-@font-face {
-  font-family: 'Blueberry Regular';
-  // src: local('Blueberry Regular'),
-  //   url('/fonts/Blueberry-Regular.otf') format('opentype');
-  src: local('Blueberry Regular');
+@mixin image-input-card {
+  width: 100%;
+  max-width: 280px;
+  height: 180px;
 }
 
-// BREAKPOINTS
-// Extra small devices (portrait phones, less than 576px)
-// No media query for `xs` since this is the default in Bootstrap
-@mixin breakpoint-up($size) {
-  @if $size == sm {
-    // Small devices (landscape phones, 576px and up)
-    @media (min-width: 576px) {
-      @content;
+@mixin card-control {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  z-index: 5;
+
+  &-btn {
+    display: block;
+    width: 50px;
+    background-color: rgba($main-black, 0.5);
+    border: none;
+    padding: 0.6rem 0.7rem;
+    font-size: 1.2rem;
+    color: white;
+    text-align: center;
+    transition: background-color 200ms ease-out;
+
+    &:hover,
+    &:focus {
+      background-color: rgba($main-black, 0.8);
     }
-  } @else if $size == md {
-    // Medium devices (tablets, 768px and up)
-    @media (min-width: 768px) {
-      @content;
-    }
-  } @else if $size == lg {
-    // Large devices (desktops, 992px and up)
-    @media (min-width: 992px) {
-      @content;
-    }
-  } @else if $size == xl {
-    // Extra large devices (large desktops, 1200px and up)
-    @media (min-width: 1200px) {
-      @content;
+
+    &:focus {
+      outline: solid $main-color 3px;
     }
   }
-}
+} 
 
 @mixin Comfortaa {
   font-family: 'Comfortaa', 'Open Sans', sans-serif;

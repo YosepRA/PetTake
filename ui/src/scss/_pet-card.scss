@@ -27,21 +27,7 @@
   }
 
   &__control {
-    @include flexCenter();
-    justify-content: flex-end;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 5;
-    width: 100%;
-
-    &-btn {
-      background-color: transparent;
-      border: none;
-      padding: 0.6rem 0.7rem;
-      font-size: 1.2rem;
-      color: $main-black;
-    }
+    @include card-control();
   }
 }
 
@@ -60,18 +46,6 @@
     &__image {
       height: 220px;
     }
-
-    &__control {
-      &-btn {
-        color: rgba($main-black, 0.8);
-        transition: all 200ms ease-out;
-
-        &:hover {
-          background-color: $main-black;
-          color: white;
-        }
-      }
-    }
   }
 }
 
@@ -87,12 +61,6 @@
   .pet {
     &__image {
       height: 320px;
-    }
-
-    &__control {
-      &-btn {
-        font-size: 1.4rem;
-      }
     }
   }
 }

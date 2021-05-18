@@ -17,6 +17,7 @@
     padding: 0.3rem 0.5rem;
     @include light-button();
     font-size: 0.9rem;
+    text-align: center;
 
     &:not(.list-control__btn--new) {
       margin-right: 0.5rem;
@@ -24,6 +25,10 @@
 
     &--new {
       @include main-button();
+
+      &:hover {
+        text-decoration: none;
+      }
     }
   }
 
@@ -85,8 +90,11 @@
     &__btn {
       min-width: 90px;
       padding: 0.375rem 0.75rem;
-      margin-right: 1rem;
       font-size: 1rem;
+
+      &:not(.list-control__btn--new) {
+        margin-right: 1rem;
+      }
     }
 
     &__menu {

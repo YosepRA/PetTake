@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": "AC6DA,UAAU,CACR,WAAW,CAAE,mBAAmB,CAGhC,GAAG,CAAE,0BAA0B,CD/DjC,AAEI,UAFM,CAEL,SAAI,AAAC,CACJ,aAAa,CAAE,MAAM,CACtB",
+    "mappings": "ACOA,UAAU,CACR,WAAW,CAAE,mBAAmB,CAGhC,GAAG,CAAE,0BAA0B,CDTjC,AAEI,UAFM,CAEL,SAAI,AAAC,CACJ,aAAa,CAAE,MAAM,CACtB",
     "sources": [
         "../scss/user.scss",
         "../scss/_config.scss"
