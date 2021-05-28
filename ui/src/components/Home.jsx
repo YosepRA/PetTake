@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import '../css/home.min.css';
 
-import generatePets from '../fakeData';
+import actionCreator from './store/actionCreator';
 import ListControl from './ListControl';
 import PetCard from './PetCard';
 import Pagination from './Pagination';
-
-const demoPets = generatePets(5);
+import NoDataFound from './NoDataFound';
+import withSearchToVariables from './withSearchToVariables';
 
 function createPetItems(petArray) {
   return petArray.map((pet) => (
@@ -18,16 +19,41 @@ function createPetItems(petArray) {
   ));
 }
 
-export default class Home extends Component {
+const mapStateToProps = ({ petList }) => ({
+  petList,
+});
+const mapDispatchToProps = {
+  getPetList: actionCreator.getPetList,
+};
+
+class Home extends Component {
   componentDidMount() {
     document.body.classList.add('page-home');
+
+    this.loadData();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { variables: prevVars } = prevProps;
+    const { variables: currentVars } = this.props;
+
+    if (prevVars !== currentVars) this.loadData();
   }
 
   componentWillUnmount() {
     document.body.classList.remove('page-home');
   }
 
+  loadData = () => {
+    const { getPetList, variables } = this.props;
+
+    getPetList(variables);
+  };
+
   render() {
+    const { petList } = this.props;
+    const petItems = createPetItems(petList);
+
     return (
       <main className="main-container">
         <section className="hero">
@@ -47,12 +73,20 @@ export default class Home extends Component {
 
             <Row>
               <Col>
-                <ListControl className="pet-list__control" />
+                <ListControl urlBase="/" className="pet-list__control" />
               </Col>
             </Row>
 
             <div className="pet-list__items">
-              <Row>{createPetItems(demoPets)}</Row>
+              <Row>
+                {petList.length === 0 ? (
+                  <Col>
+                    <NoDataFound />
+                  </Col>
+                ) : (
+                  petItems
+                )}
+              </Row>
             </div>
 
             <Pagination
@@ -66,3 +100,7 @@ export default class Home extends Component {
     );
   }
 }
+
+export default withSearchToVariables(
+  connect(mapStateToProps, mapDispatchToProps)(Home),
+);

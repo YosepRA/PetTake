@@ -138,6 +138,8 @@ body {
   &__modal {
     .modal-dialog {
       max-width: 370px;
+      margin: 0.5rem auto;
+      padding: 0.5rem;
     }
 
     &-header {
@@ -260,6 +262,12 @@ body {
     &__menu {
       max-width: 360px;
     }
+
+    &__modal {
+      .modal-dialog {
+        margin: 1.75rem auto;
+      }
+    }
   }
 
   .page-footer {
@@ -337,7 +345,7 @@ body {
   }
 
   .page-footer {
-    padding: 2rem 1rem 0;
+    padding: 2rem 1rem 1.4rem;
 
     .container {
       display: grid;

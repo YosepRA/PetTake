@@ -2,14 +2,23 @@
 import React from 'react';
 import { Formik, Field } from 'formik';
 import { Modal, Form, Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
+
+import actionCreator from './store/actionCreator';
 
 const initialValues = {
   username: '',
   password: '',
 };
+// const mapStateToProps = ({ authenticated }) => ({
+//   authenticated,
+// });
+// const mapDispatchToProps = {
+//   authenticate: actionCreator.authenticate,
+// };
 
 export default function LoginModalBody({ changePage }) {
-  const handleClick = (event) => {
+  const handleChangePage = (event) => {
     event.preventDefault();
     changePage('register');
   };
@@ -53,7 +62,7 @@ export default function LoginModalBody({ changePage }) {
       <Modal.Footer className="navbar__modal-footer">
         <p>
           Don&apos;t have an account?{' '}
-          <a href="#" className="text-primary" onClick={handleClick}>
+          <a href="#" className="text-primary" onClick={handleChangePage}>
             Register.
           </a>
         </p>
@@ -61,3 +70,10 @@ export default function LoginModalBody({ changePage }) {
     </>
   );
 }
+
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps,
+// )(({ authenticate, changePage }) => {
+
+// });

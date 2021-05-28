@@ -1,18 +1,22 @@
+const mongoose = require('mongoose');
+
 const Pet = require('./models/Pet');
 const User = require('./models/User');
 
 // Will be changed later based on signed in user.
 const demoUser = { username: 'bigjoe' };
 
-// ===== Helpers =====\
+// ===== Helpers =====
 
-// ===== Resolvers =====
+function buildFilter(filterList) {
+  const {
+    preferHomeWith,
+    preferHomeWithout,
+    health,
+    ...restFilter
+  } = filterList;
 
-async function list(
-  _,
-  { preferHomeWith, preferHomeWithout, health, ...filterRest },
-) {
-  const filter = { ...filterRest };
+  const filter = { ...restFilter };
 
   if (preferHomeWith) {
     filter.preferHomeWith = { $all: preferHomeWith };
@@ -24,16 +28,37 @@ async function list(
     filter.health = { $all: health };
   }
 
-  const petList = await Pet.find(filter);
+  return filter;
+}
+
+// ===== Query resolvers =====
+
+async function list(_, { sort = '-createdDate', ...restFilter }) {
+  const filter = buildFilter(restFilter);
+
+  const petList = await Pet.find(filter).sort(sort);
 
   return petList;
 }
 
 async function details(_, { _id }) {
-  const pet = Pet.findById(_id);
+  const pet = await Pet.findById(_id).populate('author').exec();
 
   return pet;
 }
+
+async function userPetList(_, { petIds, sort, ...restFilter }) {
+  const ids = petIds.map((id) => mongoose.Types.ObjectId(id));
+  const filter = buildFilter(restFilter);
+  // eslint-disable-next-line no-underscore-dangle
+  filter._id = { $in: ids };
+
+  const petList = await Pet.find(filter).sort(sort);
+
+  return petList;
+}
+
+// ===== Mutation resolvers =====
 
 async function add(_, args) {
   const pet = { ...args.pet };
@@ -62,4 +87,4 @@ async function remove(_, { _id }) {
   return false;
 }
 
-module.exports = { list, details, add, update, remove };
+module.exports = { list, details, userPetList, add, update, remove };

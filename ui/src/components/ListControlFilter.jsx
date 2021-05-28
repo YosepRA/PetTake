@@ -35,7 +35,7 @@ function createFilterSelectOptions(data) {
   ));
 }
 
-function createCheckbox(data, fieldName) {
+function createCheckbox(data, fieldName, selectedValues = []) {
   return data.map((d) => (
     <Field key={d} name={fieldName}>
       {({ field }) => (
@@ -44,28 +44,27 @@ function createCheckbox(data, fieldName) {
           type="checkbox"
           label={d}
           id={`${fieldName}-${d}`}
-          value={d}
           className="pet-form___field pet-form__field--checkbox"
+          value={d}
+          checked={selectedValues.includes(d)}
         />
       )}
     </Field>
   ));
 }
 
-export default function ListControlFilter() {
+export default function ListControlFilter(props) {
   const breedOptions = createFilterSelectOptions(breeds);
   const ageOptions = createFilterSelectOptions(ages);
   const genderOptions = createFilterSelectOptions(genders);
   const coatLengthOptions = createFilterSelectOptions(coatLengths);
-  const preferHomeWithCheckbox = createCheckbox(preferHomes, 'preferHomeWith');
-  const preferHomeWithoutCheckbox = createCheckbox(
-    preferHomes,
-    'preferHomeWithout',
-  );
-  const healthCheckbox = createCheckbox(healths, 'health');
+
+  const { handleReset: handleFormReset } = props;
 
   const handleFormSubmit = (values) => {
-    console.log('ListControlFIlter values: ', JSON.stringify(values, null, 2));
+    const { applyControl } = props;
+
+    applyControl(values);
   };
 
   return (
@@ -79,8 +78,12 @@ export default function ListControlFilter() {
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="list-control__menu list-control__menu--filter">
-        <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
-          {({ handleSubmit, handleReset }) => (
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleFormSubmit}
+          onReset={handleFormReset}
+        >
+          {({ handleSubmit, handleReset, values }) => (
             <Form onSubmit={handleSubmit} noValidate>
               <Form.Row>
                 <Col xs="12" md="6">
@@ -146,21 +149,29 @@ export default function ListControlFilter() {
                 <Col xs="12" md="6">
                   <Form.Group controlId="prefer-home-with">
                     <Form.Label>Prefer home with</Form.Label>
-                    {preferHomeWithCheckbox}
+                    {createCheckbox(
+                      preferHomes,
+                      'preferHomeWith',
+                      values.preferHomeWith,
+                    )}
                   </Form.Group>
                 </Col>
 
                 <Col xs="12" md="6">
                   <Form.Group controlId="prefer-home-without">
                     <Form.Label>Prefer home without</Form.Label>
-                    {preferHomeWithoutCheckbox}
+                    {createCheckbox(
+                      preferHomes,
+                      'preferHomeWithout',
+                      values.preferHomeWithout,
+                    )}
                   </Form.Group>
                 </Col>
 
                 <Col xs="12" md="6">
                   <Form.Group controlId="health">
                     <Form.Label>Health</Form.Label>
-                    {healthCheckbox}
+                    {createCheckbox(healths, 'health', values.health)}
                   </Form.Group>
                 </Col>
               </Form.Row>

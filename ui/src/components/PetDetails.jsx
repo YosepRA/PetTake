@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Container, Row, Col, Carousel } from 'react-bootstrap';
+
 import '../css/pet-details.min.css';
 
-import generatePets from '../fakeData';
+import actionCreator from './store/actionCreator';
 
-const demoPet = generatePets(1)[0];
+const mapStateToProps = ({ petDetails }) => ({
+  petDetails,
+});
+const mapDispatchToProps = {
+  getPetDetails: actionCreator.getPetDetails,
+};
 
 function createCarouselItems(data, petName) {
   return data.map((imgSrc, index) => (
@@ -34,8 +41,17 @@ function arrayToCommaString(array) {
   return array.join(', ');
 }
 
-export default class PetDetails extends Component {
+class PetDetails extends Component {
   componentDidMount() {
+    const {
+      match: {
+        params: { id },
+      },
+      getPetDetails,
+    } = this.props;
+
+    getPetDetails(id);
+
     document.body.classList.add('page-pet-details');
   }
 
@@ -44,6 +60,10 @@ export default class PetDetails extends Component {
   }
 
   render() {
+    const { petDetails } = this.props;
+
+    if (Object.keys(petDetails).length === 0) return null;
+
     const {
       name,
       breed,
@@ -56,7 +76,7 @@ export default class PetDetails extends Component {
       images,
       description,
       author: { email, phone, address },
-    } = demoPet;
+    } = petDetails;
     const carouselItems = createCarouselItems(images, name);
     const aboutData = [
       { field: 'Breed', value: breed, cssModifier: 'breed' },
@@ -135,3 +155,5 @@ export default class PetDetails extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(PetDetails);

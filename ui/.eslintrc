@@ -8,6 +8,7 @@
     "implicit-arrow-linebreak": "off",
     "object-curly-newline": "off",
     "no-param-reassign": "off",
+    "operator-linebreak": "off",
     "react/prop-types": "off",
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-props-no-spreading": "off"

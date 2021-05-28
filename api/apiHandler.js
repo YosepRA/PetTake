@@ -2,12 +2,13 @@ const { ApolloServer } = require('apollo-server-express');
 const fs = require('fs');
 
 const GraphQLDate = require('./graphql_date');
-const { list, details, add, update, remove } = require('./pet');
+const { list, details, userPetList, add, update, remove } = require('./pet');
 
 const resolvers = {
   Query: {
     petList: list,
     pet: details,
+    userPetList,
   },
   Mutation: {
     petAdd: add,

@@ -15,10 +15,11 @@ type Pet {
   health: [String]
   images: [String!]!
   description: String!
-  author: String!
+  author: User!
 }
 
 type User {
+  _id: ID!
   username: String!
   email: String!
   name: String!
@@ -66,8 +67,20 @@ type Query {
     preferHomeWith: [String]
     preferHomeWithout: [String]
     health: [String]
+    sort: String
   ): [Pet!]!
   pet(_id: ID!): Pet!
+  userPetList(
+    petIds: [ID]!
+    breed: String
+    age: String
+    gender: String
+    coatLength: String
+    preferHomeWith: [String]
+    preferHomeWithout: [String]
+    health: [String]
+    sort: String
+  ): [Pet]!
 }
 
 type Mutation {
