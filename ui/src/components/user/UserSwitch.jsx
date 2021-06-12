@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -52,6 +52,8 @@ export default class PetForm extends Component {
               <Switch>
                 <Route path={`${path}/pet`} component={UserPetList} />
                 <Route path={`${path}/setting`} component={UserSetting} />
+
+                <Redirect exact from="/user" to="/user/pet" />
               </Switch>
             </Col>
           </Row>

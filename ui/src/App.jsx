@@ -68,8 +68,7 @@ export default function App() {
             <Route path="/pet/:id" component={PetDetails} />
             <Route path="/contact" component={Contact} />
 
-            <Redirect exact from="/user" to="/user/pet" />
-            <Route path="/user/pet/:mode" component={PetForm} />
+            <Route path="/user/pet/:mode/:id?" component={PetForm} />
             <Route path="/user" component={UserSwitch} />
 
             <Redirect to="/" />

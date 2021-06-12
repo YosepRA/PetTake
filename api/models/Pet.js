@@ -12,7 +12,12 @@ const petSchema = new Schema({
   preferHomeWith: [String],
   preferHomeWithout: [String],
   health: [String],
-  images: [String],
+  images: [
+    {
+      path: String,
+      filename: String,
+    },
+  ],
   description: String,
   author: { type: Schema.Types.ObjectId, ref: 'User' },
 });

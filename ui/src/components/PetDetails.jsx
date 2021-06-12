@@ -14,10 +14,10 @@ const mapDispatchToProps = {
 };
 
 function createCarouselItems(data, petName) {
-  return data.map((imgSrc, index) => (
-    <Carousel.Item key={imgSrc} className="pet-carousel__item">
+  return data.map((image, index) => (
+    <Carousel.Item key={image.path} className="pet-carousel__item">
       <img
-        src={imgSrc}
+        src={image.path}
         alt={`${petName}-${index + 1}`}
         className="pet-carousel__image"
       />
@@ -62,7 +62,7 @@ class PetDetails extends Component {
   render() {
     const { petDetails } = this.props;
 
-    if (Object.keys(petDetails).length === 0) return null;
+    if (!petDetails || Object.keys(petDetails).length === 0) return null;
 
     const {
       name,

@@ -1,13 +1,21 @@
+/* eslint-disable indent */
+
 import React, { Component } from 'react';
 import { Container, Form, Col, Button } from 'react-bootstrap';
 import { Formik, Field } from 'formik';
 
 import '../../css/pet-form.min.css';
 
-import generatePets from '../../fakeData';
+import DataSource from '../store/DataSource';
+import actionTypes from '../store/actionTypes';
+import queries from '../store/graphQLQueries';
+import mutations from '../store/graphQLMutations';
 import PetFormImageInput from './PetFormImageInput';
 
-const demoPet = generatePets(1)[0];
+const dataSource = new DataSource();
+
+// ===== Input options. =====
+
 const breeds = [
   'Irish Terrier',
   'Georgian Shepherd',
@@ -15,22 +23,83 @@ const breeds = [
   'Dogo Guatemalteco',
   'Cretan Hound',
 ];
-const initialValues = {
-  name: '',
-  breed: '',
-  gender: 'male',
-  age: 'puppy',
-  coatLength: 'short',
-  health: [],
-  preferHomeWith: [],
-  preferHomeWithout: [],
-  description: '',
-  iamges: [],
-  useAccountContact: true,
-  email: '',
-  phone: '',
-  address: '',
-};
+const genders = [
+  {
+    label: 'Male',
+    id: 'male',
+    value: 'Male',
+  },
+  {
+    label: 'Female',
+    id: 'female',
+    value: 'Female',
+  },
+];
+const ages = [
+  {
+    label: 'Puppy',
+    id: 'puppy',
+    value: 'Puppy',
+  },
+  {
+    label: 'Young',
+    id: 'young',
+    value: 'Young',
+  },
+  {
+    label: 'Mature',
+    id: 'mature',
+    value: 'Mature',
+  },
+];
+const coatLengths = [
+  {
+    label: 'Short',
+    id: 'short',
+    value: 'Short',
+  },
+  {
+    label: 'Medium',
+    id: 'medium',
+    value: 'Medium',
+  },
+  {
+    label: 'Long',
+    id: 'long',
+    value: 'Long',
+  },
+];
+const healths = [
+  {
+    label: 'Vaccinated',
+    id: 'vaccinated',
+    value: 'Vaccinated',
+  },
+  {
+    label: 'Spayed/Neutered',
+    id: 'spayed/neutered',
+    value: 'Spayed/Neutered',
+  },
+];
+const preferHomes = [
+  {
+    label: 'Other dogs',
+    id: 'other-dogs',
+    value: 'Other dogs',
+  },
+  {
+    label: 'Other cats',
+    id: 'other-cats',
+    value: 'Other cats',
+  },
+  {
+    label: 'Children',
+    id: 'children',
+    value: 'Children',
+  },
+];
+
+// ====== Helpers. ======
 
 function createSelectOptions(data) {
   return data.map((item) => (
@@ -40,8 +109,93 @@ function createSelectOptions(data) {
   ));
 }
 
+function createRadioOptions(groupLabel, name, data) {
+  const radios = data.map(({ label, id, value }) => (
+    <Field key={id} name={name}>
+      {({ field }) => (
+        <Form.Check
+          {...field}
+          type="radio"
+          label={label}
+          id={`${name}-${id}`}
+          value={value}
+          className="pet-form___field pet-form__field--radio"
+          defaultChecked={field.value === value}
+        />
+      )}
+    </Field>
+  ));
+
+  return (
+    <>
+      <Form.Label className="pet-form__label">{groupLabel}</Form.Label>
+      {radios}
+    </>
+  );
+}
+
+function createCheckboxOptions(groupLabel, name, activeValues, data) {
+  const checkboxes = data.map(({ label, id, value }) => (
+    <Field key={id} name={name}>
+      {({ field }) => (
+        <Form.Check
+          {...field}
+          type="checkbox"
+          label={label}
+          id={`${name}-${id}`}
+          value={value}
+          className="pet-form___field pet-form__field--checkbox"
+          defaultChecked={activeValues.includes(value)}
+        />
+      )}
+    </Field>
+  ));
+
+  return (
+    <>
+      <Form.Label className="pet-form__label">{groupLabel}</Form.Label>
+      {checkboxes}
+    </>
+  );
+}
+
 export default class PetForm extends Component {
-  componentDidMount() {
+  constructor() {
+    super();
+    this.state = {
+      status: '',
+      initialValues: {
+        name: '',
+        breed: '',
+        gender: 'Male',
+        age: 'Puppy',
+        coatLength: 'Short',
+        health: [],
+        preferHomeWith: [],
+        preferHomeWithout: [],
+        description: '',
+        images: [],
+      },
+    };
+  }
+
+  async componentDidMount() {
+    const {
+      match: {
+        params: { mode, id },
+      },
+    } = this.props;
+
+    if (mode === 'edit') {
+      const data = await dataSource.graphQLFetch(
+        queries[actionTypes.PET_DETAILS],
+        { _id: id },
+      );
+      if (data && data.pet) {
+        this.setState({ initialValues: data.pet, status: 'loaded' });
+      }
+    }
+
     document.body.classList.add('page-pet-form');
   }
 
@@ -49,11 +203,56 @@ export default class PetForm extends Component {
     document.body.classList.remove('page-pet-form');
   }
 
-  handleSubmit = (values) => {
-    console.log('PetForm values: ', JSON.stringify(values, null, 2));
+  handleSubmit = async (values) => {
+    try {
+      const {
+        history,
+        match: {
+          params: { mode, id },
+        },
+      } = this.props;
+      const { author, ...petData } = values;
+
+      const query =
+        mode === 'new'
+          ? mutations[actionTypes.PET_CREATE]
+          : mutations[actionTypes.PET_UPDATE];
+      const vars =
+        mode === 'new'
+          ? {
+              pet: petData,
+            }
+          : {
+              _id: id,
+              changes: petData,
+            };
+
+      await dataSource.graphQLFetch(query, vars);
+
+      history.push('/user/pet');
+    } catch (error) {
+      console.error('PetForm handle submit error.', error.message);
+    }
+
+    // console.log('PetForm values: ', JSON.stringify(values, null, 2));
+  };
+
+  handleCancel = () => {
+    const { history } = this.props;
+
+    history.push('/user/pet');
   };
 
   render() {
+    const {
+      match: {
+        params: { mode, id },
+      },
+    } = this.props;
+    const { status, initialValues } = this.state;
+    // Using key to force update Formik component.
+    // It won't re-render even with new initialValues.
+    const formikKey = status === 'loaded' ? `${id}-${status}` : id;
     const breedOptions = createSelectOptions(breeds);
 
     return (
@@ -61,7 +260,11 @@ export default class PetForm extends Component {
         <Container>
           <h1 className="page-title">New Pet Form</h1>
 
-          <Formik onSubmit={this.handleSubmit} initialValues={initialValues}>
+          <Formik
+            key={mode === 'edit' ? formikKey : 'new'}
+            onSubmit={this.handleSubmit}
+            initialValues={initialValues}
+          >
             {({ values, handleSubmit, setFieldValue }) => (
               <Form noValidate onSubmit={handleSubmit} className="pet-form">
                 <section className="pet-form__section pet-form__basic">
@@ -108,37 +311,7 @@ export default class PetForm extends Component {
                         controlId="gender"
                         className="pet-form__group pet-form__gender"
                       >
-                        <Form.Label className="pet-form__label">
-                          Gender
-                        </Form.Label>
-
-                        <Field name="gender">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="radio"
-                              label="Male"
-                              id="male"
-                              value="male"
-                              className="pet-form___field pet-form__field--radio"
-                              defaultChecked={field.value === 'male'}
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="gender">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="radio"
-                              label="Female"
-                              id="female"
-                              value="female"
-                              className="pet-form___field pet-form__field--radio"
-                              defaultChecked={field.value === 'female'}
-                            />
-                          )}
-                        </Field>
+                        {createRadioOptions('Gender', 'gender', genders)}
                       </Form.Group>
                     </Col>
 
@@ -147,49 +320,7 @@ export default class PetForm extends Component {
                         controlId="age"
                         className="pet-form__group pet-form__age"
                       >
-                        <Form.Label className="pet-form__label">Age</Form.Label>
-
-                        <Field name="age">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="radio"
-                              label="Puppy"
-                              id="puppy"
-                              value="puppy"
-                              className="pet-form___field pet-form__field--radio"
-                              defaultChecked={field.value === 'puppy'}
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="age">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="radio"
-                              label="Young"
-                              id="young"
-                              value="young"
-                              className="pet-form___field pet-form__field--radio"
-                              defaultChecked={field.value === 'young'}
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="age">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="radio"
-                              label="Mature"
-                              id="mature"
-                              value="mature"
-                              className="pet-form___field pet-form__field--radio"
-                              defaultChecked={field.value === 'mature'}
-                            />
-                          )}
-                        </Field>
+                        {createRadioOptions('Age', 'age', ages)}
                       </Form.Group>
                     </Col>
 
@@ -198,51 +329,11 @@ export default class PetForm extends Component {
                         controlId="coat-length"
                         className="pet-form__group pet-form__coat-length"
                       >
-                        <Form.Label className="pet-form__label">
-                          Coat Length
-                        </Form.Label>
-
-                        <Field name="coatLength">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="radio"
-                              label="Short"
-                              id="short"
-                              value="short"
-                              className="pet-form___field pet-form__field--radio"
-                              defaultChecked={field.value === 'short'}
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="coatLength">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="radio"
-                              label="Medium"
-                              id="medium"
-                              value="medium"
-                              className="pet-form___field pet-form__field--radio"
-                              defaultChecked={field.value === 'medium'}
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="coatLength">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="radio"
-                              label="Long"
-                              id="long"
-                              value="long"
-                              className="pet-form___field pet-form__field--radio"
-                              defaultChecked={field.value === 'long'}
-                            />
-                          )}
-                        </Field>
+                        {createRadioOptions(
+                          'Coat length',
+                          'coatLength',
+                          coatLengths,
+                        )}
                       </Form.Group>
                     </Col>
 
@@ -251,35 +342,12 @@ export default class PetForm extends Component {
                         controlId="health"
                         className="pet-form__group pet-form__health"
                       >
-                        <Form.Label className="pet-form__label">
-                          Health
-                        </Form.Label>
-
-                        <Field name="health">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="checkbox"
-                              label="Vaccinated"
-                              id="vaccinated"
-                              value="vaccinated"
-                              className="pet-form___field pet-form__field--checkbox"
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="health">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="checkbox"
-                              label="Spayed/Neutered"
-                              id="spayed/neutered"
-                              value="spayed/neutered"
-                              className="pet-form___field pet-form__field--checkbox"
-                            />
-                          )}
-                        </Field>
+                        {createCheckboxOptions(
+                          'Health',
+                          'health',
+                          values.health,
+                          healths,
+                        )}
                       </Form.Group>
                     </Col>
                   </Form.Row>
@@ -290,48 +358,12 @@ export default class PetForm extends Component {
                         controlId="prefer-home-with"
                         className="pet-form__group pet-form__prefer-home-with"
                       >
-                        <Form.Label className="pet-form__label">
-                          Prefer in a home with
-                        </Form.Label>
-
-                        <Field name="preferHomeWith">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="checkbox"
-                              label="Other dogs"
-                              id="other dogs"
-                              value="other dogs"
-                              className="pet-form___field pet-form__field--checkbox"
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="preferHomeWith">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="checkbox"
-                              label="Other cats"
-                              id="other cats"
-                              value="other cats"
-                              className="pet-form___field pet-form__field--checkbox"
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="preferHomeWith">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="checkbox"
-                              label="Children"
-                              id="children"
-                              value="children"
-                              className="pet-form___field pet-form__field--checkbox"
-                            />
-                          )}
-                        </Field>
+                        {createCheckboxOptions(
+                          'Prefer in a home with',
+                          'preferHomeWith',
+                          values.preferHomeWith,
+                          preferHomes,
+                        )}
                       </Form.Group>
                     </Col>
 
@@ -340,48 +372,12 @@ export default class PetForm extends Component {
                         controlId="prefer-home-without"
                         className="pet-form__group pet-form__prefer-home-without"
                       >
-                        <Form.Label className="pet-form__label">
-                          Prefer in a home without
-                        </Form.Label>
-
-                        <Field name="preferHomeWithout">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="checkbox"
-                              label="Other dogs"
-                              id="other dogs"
-                              value="other dogs"
-                              className="pet-form___field pet-form__field--checkbox"
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="preferHomeWithout">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="checkbox"
-                              label="Other cats"
-                              id="other cats"
-                              value="other cats"
-                              className="pet-form___field pet-form__field--checkbox"
-                            />
-                          )}
-                        </Field>
-
-                        <Field name="preferHomeWithout">
-                          {({ field }) => (
-                            <Form.Check
-                              {...field}
-                              type="checkbox"
-                              label="Children"
-                              id="children"
-                              value="children"
-                              className="pet-form___field pet-form__field--checkbox"
-                            />
-                          )}
-                        </Field>
+                        {createCheckboxOptions(
+                          'Prefer in a home without',
+                          'preferHomeWithout',
+                          values.preferHomeWithout,
+                          preferHomes,
+                        )}
                       </Form.Group>
                     </Col>
                   </Form.Row>
@@ -406,91 +402,9 @@ export default class PetForm extends Component {
 
                   <PetFormImageInput
                     petName={values.name}
-                    images={demoPet.images}
+                    images={values.images}
                     setFieldValue={setFieldValue}
                   />
-                </section>
-
-                <section className="pet-form__section pet-form__contact">
-                  <h2 className="pet-form__section-title">
-                    Contact Information
-                  </h2>
-
-                  <Form.Group
-                    controlId="use-account-contact"
-                    className="pet-form__group pet-form__use-account-contact"
-                  >
-                    <Field name="useAccountContact">
-                      {({ field }) => (
-                        <Form.Check
-                          {...field}
-                          type="checkbox"
-                          label="Use account contact information"
-                          id="use-account-contact-information"
-                          className="pet-form___field pet-form__field--checkbox"
-                          defaultChecked={field.value}
-                        />
-                      )}
-                    </Field>
-                  </Form.Group>
-
-                  {!values.useAccountContact && (
-                    <>
-                      <Form.Group
-                        controlId="email"
-                        className="pet-form__group pet-form__email"
-                      >
-                        <Form.Label className="pet-form__label">
-                          Email
-                        </Form.Label>
-                        <Field name="email">
-                          {({ field }) => (
-                            <Form.Control
-                              {...field}
-                              type="email"
-                              className="pet-form___field pet-form__field--email"
-                            />
-                          )}
-                        </Field>
-                      </Form.Group>
-
-                      <Form.Group
-                        controlId="phone"
-                        className="pet-form__group pet-form__phone"
-                      >
-                        <Form.Label className="pet-form__label">
-                          Phone
-                        </Form.Label>
-                        <Field name="phone">
-                          {({ field }) => (
-                            <Form.Control
-                              {...field}
-                              type="text"
-                              className="pet-form___field pet-form__field--text"
-                            />
-                          )}
-                        </Field>
-                      </Form.Group>
-
-                      <Form.Group
-                        controlId="address"
-                        className="pet-form__group pet-form__address"
-                      >
-                        <Form.Label className="pet-form__label">
-                          Address
-                        </Form.Label>
-                        <Field name="address">
-                          {({ field }) => (
-                            <Form.Control
-                              {...field}
-                              as="textarea"
-                              className="pet-form___field pet-form__field--textarea"
-                            />
-                          )}
-                        </Field>
-                      </Form.Group>
-                    </>
-                  )}
                 </section>
 
                 <section className="pet-form__control">
@@ -499,13 +413,14 @@ export default class PetForm extends Component {
                     type="submit"
                     className="pet-form__control-btn pet-form__control-btn--create"
                   >
-                    Create
+                    {mode === 'new' ? 'Create' : 'Edit'}
                   </Button>
 
                   <Button
                     variant="primary"
                     type="button"
                     className="pet-form__control-btn pet-form__control-btn--cancel"
+                    onClick={this.handleCancel}
                   >
                     Cancel
                   </Button>

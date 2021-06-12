@@ -25,7 +25,9 @@ const queries = {
         _id
         name
         breed
-        images
+        images {
+          path
+        }
       }
     }
   `,
@@ -41,7 +43,10 @@ const queries = {
         preferHomeWithout
         health
         description
-        images
+        images {
+          path
+          filename
+        }
         author {
           email
           phone
@@ -76,7 +81,9 @@ const queries = {
         _id
         name
         breed
-        images
+        images {
+          path
+        }
       }
     }
   `,

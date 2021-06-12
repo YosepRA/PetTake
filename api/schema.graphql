@@ -13,7 +13,7 @@ type Pet {
   preferHomeWith: [String]
   preferHomeWithout: [String]
   health: [String]
-  images: [String!]!
+  images: [Image]!
   description: String!
   author: User!
 }
@@ -28,6 +28,12 @@ type User {
   pets: [Pet]
 }
 
+type Image {
+  _id: ID!
+  path: String!
+  filename: String!
+}
+
 ##### INPUT TYPES #####
 
 input PetInput {
@@ -39,7 +45,7 @@ input PetInput {
   preferHomeWith: [String]
   preferHomeWithout: [String]
   health: [String]
-  images: [String!]!
+  images: [ImageInput]!
   description: String!
 }
 
@@ -52,8 +58,13 @@ input PetUpdateInput {
   preferHomeWith: [String]
   preferHomeWithout: [String]
   health: [String]
-  images: [String]
+  images: [ImageInput]
   description: String
+}
+
+input ImageInput {
+  path: String!
+  filename: String!
 }
 
 ##### TOP LEVEL DECLARATION #####
@@ -84,7 +95,7 @@ type Query {
 }
 
 type Mutation {
-  petAdd(pet: PetInput!): Pet!
+  petCreate(pet: PetInput!): Pet!
   petUpdate(_id: ID!, changes: PetUpdateInput!): Pet!
   petDelete(_id: ID!): Boolean!
 }

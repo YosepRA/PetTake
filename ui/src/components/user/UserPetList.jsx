@@ -13,11 +13,11 @@ import NoDataFound from '../NoDataFound';
 import withSearchToVariables from '../withSearchToVariables';
 
 const demoPetIds = [
-  '60af60e81950eb1a70922b4c',
-  '60af60e81950eb1a70922b4d',
-  '60af60e81950eb1a70922b4e',
-  '60af60e81950eb1a70922b4f',
-  '60af60e81950eb1a70922b50',
+  '60c48b54bebb4f117cb118d5',
+  '60c48b54bebb4f117cb118db',
+  '60c48b54bebb4f117cb118df',
+  '60c48b54bebb4f117cb118e1',
+  '60c48b54bebb4f117cb118d9',
 ];
 
 const mapStateToProps = ({ userPetList, user }) => ({
@@ -26,12 +26,18 @@ const mapStateToProps = ({ userPetList, user }) => ({
 });
 const mapDispatchToProps = {
   getUserPetList: actionCreator.getUserPetList,
+  deletePet: actionCreator.deletePet,
 };
 
-function createPetItems(petArray) {
+function createPetItems(petArray, handleDelete) {
   return petArray.map((pet) => (
     <Col key={pet._id} sm="6" md="4">
-      <PetCard pet={pet} baseUrl="/user/pet/edit" controlOverlay />
+      <PetCard
+        pet={pet}
+        baseUrl="/user/pet/edit"
+        handleDelete={handleDelete}
+        controlOverlay
+      />
     </Col>
   ));
 }
@@ -54,6 +60,16 @@ class UserPetList extends Component {
     document.body.classList.remove('page-user-pet-list');
   }
 
+  handleDelete = async (_id) => {
+    try {
+      const { deletePet } = this.props;
+
+      await deletePet(_id);
+    } catch (error) {
+      alert(`UserPetList error: ${error.message}`);
+    }
+  };
+
   loadData = () => {
     const { getUserPetList, variables } = this.props;
     const userPetListVars = { ...variables, petIds: demoPetIds };
@@ -75,7 +91,7 @@ class UserPetList extends Component {
                 <NoDataFound />
               </Col>
             ) : (
-              createPetItems(userPetList)
+              createPetItems(userPetList, this.handleDelete)
             )}
           </Row>
         </div>

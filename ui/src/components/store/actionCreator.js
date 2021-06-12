@@ -1,20 +1,39 @@
 import actionTypes from './actionTypes';
-import graphqlFetch from '../graphqlFetch';
-import queries from './graphqlQueries';
+import DataSource from './DataSource';
+import queries from './graphQLQueries';
+import mutations from './graphQLMutations';
+
+const dataSource = new DataSource();
 
 const actionCreator = {
   getPetList: (variables) => ({
     type: actionTypes.PET_LIST,
-    payload: graphqlFetch(queries[actionTypes.PET_LIST], variables),
+    payload: dataSource.graphQLFetch(queries[actionTypes.PET_LIST], variables),
   }),
   getPetDetails: (_id) => ({
     type: actionTypes.PET_DETAILS,
-    payload: graphqlFetch(queries[actionTypes.PET_DETAILS], { _id }),
+    payload: dataSource.graphQLFetch(queries[actionTypes.PET_DETAILS], { _id }),
   }),
   getUserPetList: (variables) => ({
     type: actionTypes.USER_PET_LIST,
-    payload: graphqlFetch(queries[actionTypes.USER_PET_LIST], variables),
+    payload: dataSource.graphQLFetch(
+      queries[actionTypes.USER_PET_LIST],
+      variables,
+    ),
   }),
+  deletePet: async (_id) => {
+    const data = await dataSource.graphQLFetch(
+      mutations[actionTypes.PET_DELETE],
+      { _id },
+    );
+    return {
+      type: actionTypes.PET_DELETE,
+      payload: {
+        _id,
+        data: data.petDelete,
+      },
+    };
+  },
 };
 
 export default actionCreator;

@@ -2,9 +2,9 @@
 import React from 'react';
 import { Formik, Field } from 'formik';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 
-import actionCreator from './store/actionCreator';
+// import actionCreator from './store/actionCreator';
 
 const initialValues = {
   username: '',
@@ -70,10 +70,3 @@ export default function LoginModalBody({ changePage }) {
     </>
   );
 }
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-// )(({ authenticate, changePage }) => {
-
-// });

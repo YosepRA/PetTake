@@ -6,13 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function PetCard({
   pet: { _id, name, breed, images },
   baseUrl,
+  handleDelete,
   controlOverlay,
 }) {
   const linkUrl = `${baseUrl}/${_id}`;
-
-  const handleDelete = () => {
-    console.log(`Delete pet id: ${_id}`);
-  };
 
   const controlTooltip = (text) => (
     <Tooltip id={`tooltip-${text}`}>{text}</Tooltip>
@@ -21,7 +18,7 @@ export default function PetCard({
   return (
     <Card className="pet">
       <Link to={linkUrl}>
-        <Card.Img variant="top" src={images[0]} className="pet__image" />
+        <Card.Img variant="top" src={images[0].path} className="pet__image" />
       </Link>
 
       <Card.Body className="pet__body">
@@ -50,7 +47,7 @@ export default function PetCard({
               type="button"
               variant="primary"
               className="pet__control-btn pet__control-btn--delete"
-              onClick={handleDelete}
+              onClick={() => handleDelete(_id)}
             >
               <FontAwesomeIcon icon="trash" />
             </button>

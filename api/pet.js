@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 const mongoose = require('mongoose');
 
 const Pet = require('./models/Pet');
@@ -50,7 +52,7 @@ async function details(_, { _id }) {
 async function userPetList(_, { petIds, sort, ...restFilter }) {
   const ids = petIds.map((id) => mongoose.Types.ObjectId(id));
   const filter = buildFilter(restFilter);
-  // eslint-disable-next-line no-underscore-dangle
+
   filter._id = { $in: ids };
 
   const petList = await Pet.find(filter).sort(sort);
@@ -60,12 +62,12 @@ async function userPetList(_, { petIds, sort, ...restFilter }) {
 
 // ===== Mutation resolvers =====
 
-async function add(_, args) {
+async function create(_, args) {
   const pet = { ...args.pet };
-  const user = await User.find({ username: demoUser.username });
+  const user = await User.findOne({ username: demoUser.username });
 
   pet.createdDate = Date.now();
-  pet.author = user._id;
+  pet.author = user;
 
   const newPet = await Pet.create(pet);
 
@@ -87,4 +89,4 @@ async function remove(_, { _id }) {
   return false;
 }
 
-module.exports = { list, details, userPetList, add, update, remove };
+module.exports = { list, details, userPetList, create, update, remove };
