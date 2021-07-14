@@ -3,3 +3,4 @@ node_modules
 checklist.md
 scratchpad.md
 api/public
+.vscode

@@ -16,7 +16,8 @@
       {
         "singleQuote": true,
         "arrowParens": "always",
-        "endOfLine": "auto"
+        "endOfLine": "auto",
+        "trailingComma": "all"
       }
     ]
   }
