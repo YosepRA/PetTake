@@ -34,6 +34,13 @@ const actionCreator = {
       },
     };
   },
+  setAuthenticate: (status, user) => ({
+    type: actionTypes.SET_AUTHENTICATE,
+    payload: {
+      status,
+      user,
+    },
+  }),
 };
 
 export default actionCreator;

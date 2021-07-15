@@ -3,7 +3,7 @@ $secondary-color: #6fa2bf;
 $main-black: #404040;
 $light-grey: #cccccc;
 
-// @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Open+Sans:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Open+Sans:wght@300;400&display=swap');
 
 @font-face {
   font-family: 'Blueberry Regular';
@@ -128,7 +128,7 @@ $light-grey: #cccccc;
       outline: solid $main-color 3px;
     }
   }
-} 
+}
 
 @mixin Comfortaa {
   font-family: 'Comfortaa', 'Open Sans', sans-serif;

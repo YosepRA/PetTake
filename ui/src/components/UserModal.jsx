@@ -67,9 +67,17 @@ class UserModal extends Component {
             </button>
           </Modal.Header>
 
-          {page === 'login' && <LoginModalBody changePage={this.changePage} />}
+          {page === 'login' && (
+            <LoginModalBody
+              changePage={this.changePage}
+              handleClose={handleClose}
+            />
+          )}
           {page === 'register' && (
-            <RegisterModalBody changePage={this.changePage} />
+            <RegisterModalBody
+              changePage={this.changePage}
+              handleClose={handleClose}
+            />
           )}
         </Modal>
       </>

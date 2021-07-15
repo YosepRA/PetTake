@@ -38,7 +38,7 @@ class DataSource {
       );
       return response.data;
     } catch (error) {
-      console.error('postData error: ', error);
+      console.error('postData error:', error.message);
     }
 
     return undefined;
@@ -53,7 +53,7 @@ class DataSource {
       );
       return response.data;
     } catch (error) {
-      console.error('deleteData error: ', error);
+      console.error('deleteData error: ', error.message);
     }
 
     return undefined;

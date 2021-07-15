@@ -3,12 +3,13 @@ const initialState = {
   petDetails: {},
   userPetList: [],
   user: {
+    username: '',
     email: '',
     name: '',
     phone: '',
     address: '',
-    pets: [],
   },
+  isAuthenticated: false,
 };
 
 export default initialState;

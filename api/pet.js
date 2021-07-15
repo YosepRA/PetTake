@@ -20,6 +20,8 @@ function buildFilter(filterList) {
 
   const filter = { ...restFilter };
 
+  /* Filters that contain array of data. Adjust it so that it will filter out 
+  data which has a value from within the array. */
   if (preferHomeWith) {
     filter.preferHomeWith = { $all: preferHomeWith };
   }

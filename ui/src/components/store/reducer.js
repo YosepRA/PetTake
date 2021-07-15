@@ -32,6 +32,11 @@ const reducer = produce((draft, action) => {
       );
       break;
 
+    case actionTypes.SET_AUTHENTICATE:
+      draft.isAuthenticated = action.payload.status;
+      draft.user = action.payload.user;
+      break;
+
     default:
       return undefined;
   }
