@@ -34,7 +34,8 @@ import PetDetails from './components/PetDetails';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import UserSwitch from './components/user/UserSwitch';
-import PetForm from './components/user/PetForm';
+import Login from './components/Login';
+import Register from './components/Register';
 
 // Fontawesome global library build up.
 library.add(
@@ -67,8 +68,9 @@ export default function App() {
             <Route path="/" exact component={Home} />
             <Route path="/pet/:id" component={PetDetails} />
             <Route path="/contact" component={Contact} />
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
 
-            <Route path="/user/pet/:mode/:id?" component={PetForm} />
             <Route path="/user" component={UserSwitch} />
 
             <Redirect to="/" />

@@ -3,6 +3,9 @@ import React from 'react';
 import { Formik, Field } from 'formik';
 import { Modal, Form, Button } from 'react-bootstrap';
 
+import FormErrorMessage from './FormErrorMessage';
+import withRegister from './withRegister';
+
 const initialValues = {
   name: '',
   username: '',
@@ -11,19 +14,24 @@ const initialValues = {
   passwordRepeat: '',
 };
 
-export default function RegisterModalBody({ changePage }) {
-  const handleClick = (event) => {
+function RegisterModalBody(props) {
+  const {
+    error: { show, message },
+    handleFormSubmit,
+  } = props;
+
+  const handleChangePage = (event) => {
+    const { changePage } = props;
+
     event.preventDefault();
     changePage('login');
-  };
-
-  const handleFormSubmit = (values) => {
-    console.log(JSON.stringify(values, null, 2));
   };
 
   return (
     <>
       <Modal.Body className="navbar__modal-body">
+        {show && <FormErrorMessage message={message} />}
+
         <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
           {({ handleSubmit }) => (
             <Form noValidate onSubmit={handleSubmit}>
@@ -55,9 +63,9 @@ export default function RegisterModalBody({ changePage }) {
                 </Field>
               </Form.Group>
 
-              <Form.Group controlId="repeat-password">
+              <Form.Group controlId="password-repeat">
                 <Form.Label>Repeat password</Form.Label>
-                <Field name="repeatPassword">
+                <Field name="passwordRepeat">
                   {({ field }) => <Form.Control {...field} type="password" />}
                 </Field>
               </Form.Group>
@@ -77,7 +85,7 @@ export default function RegisterModalBody({ changePage }) {
       <Modal.Footer className="navbar__modal-footer">
         <p>
           Already have an account?{' '}
-          <a href="#" className="text-primary" onClick={handleClick}>
+          <a href="#" className="text-primary" onClick={handleChangePage}>
             Login.
           </a>
         </p>
@@ -85,3 +93,5 @@ export default function RegisterModalBody({ changePage }) {
     </>
   );
 }
+
+export default withRegister(RegisterModalBody);

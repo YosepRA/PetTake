@@ -72,6 +72,7 @@ class UserPetList extends Component {
 
   loadData = () => {
     const { getUserPetList, variables } = this.props;
+    // Change demo ids later...
     const userPetListVars = { ...variables, petIds: demoPetIds };
 
     getUserPetList(userPetListVars);
