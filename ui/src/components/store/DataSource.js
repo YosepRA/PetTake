@@ -1,18 +1,25 @@
 import axios from 'axios';
 
+// Axios global defaults.
+// axios.defaults.withCredentials = 'include';
+
 const API_ENDPOINT = 'http://localhost:3000';
 const GRAPHQL_ENDPOINT = `${API_ENDPOINT}/graphql`;
 
 class DataSource {
   constructor(errHandler) {
+    /* This error handler constructor is pretty much useless right now.
+    I'll probably use it for a more proper error handling on later
+    development. */
     this.errHandler = errHandler || (() => {});
   }
 
-  async graphQLFetch(query, variables = {}) {
+  async graphQLFetch(query, variables = {}, options = {}) {
     try {
       const response = await this.sendRequest('POST', GRAPHQL_ENDPOINT, {
         query,
         variables,
+        options,
       });
       // Based on Axios response object schema.
       const { data } = response;
@@ -23,18 +30,35 @@ class DataSource {
 
       return data.data;
     } catch (error) {
-      console.error('graphQLFetch error: ', error);
+      console.error('graphQLFetch error: ', error.message);
     }
 
     return undefined;
   }
 
-  async postData(endPoint, data) {
+  async getData(endPoint, options = {}) {
+    try {
+      const response = await this.sendRequest(
+        'GET',
+        `${API_ENDPOINT}${endPoint}`,
+        {},
+        options,
+      );
+      return response.data;
+    } catch (error) {
+      console.error('getData error:', error.message);
+    }
+
+    return undefined;
+  }
+
+  async postData(endPoint, data, options = {}) {
     try {
       const response = await this.sendRequest(
         'POST',
         `${API_ENDPOINT}${endPoint}`,
         data,
+        options,
       );
       return response.data;
     } catch (error) {
@@ -60,8 +84,8 @@ class DataSource {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  sendRequest(method, url, data) {
-    return axios.request({ method, url, data });
+  sendRequest(method, url, data, options = {}) {
+    return axios.request({ method, url, data, ...options });
   }
 }
 

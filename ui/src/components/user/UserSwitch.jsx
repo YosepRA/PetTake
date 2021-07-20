@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { Container, Row, Col, Nav } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+
 import { connect } from 'react-redux';
 
 import '../../css/user.min.css';
@@ -9,13 +8,34 @@ import '../../css/user.min.css';
 import UserPetList from './UserPetList';
 import UserSetting from './UserSetting';
 import PetForm from './PetForm';
+// import DataSource from '../store/DataSource';
+// import actionCreator from '../store/actionCreator';
+
+// const dataSource = new DataSource();
 
 const mapStateToProps = ({ isAuthenticated }) => ({
   isAuthenticated,
 });
+// const mapDispatchToProps = {
+//   setAuthenticate: actionCreator.setAuthenticate,
+// };
 
 class UserSwitch extends Component {
   componentDidMount() {
+    // const {
+    //   setAuthenticate,
+    //   location: { pathname },
+    //   history,
+    // } = this.props;
+
+    // const result = await dataSource.getData('/user', {
+    //   withCredentials: true,
+    // });
+    // if (result.success) {
+    //   setAuthenticate(true, result.user);
+    //   history.push({ pathname });
+    // }
+
     document.body.classList.add('page-user');
   }
 
@@ -26,49 +46,19 @@ class UserSwitch extends Component {
   render() {
     const {
       isAuthenticated,
-      match: { path, url },
+      match: { path },
     } = this.props;
 
     return (
-      <main className="main-container">
-        <Container>
-          <Row>
-            <Col>
-              <Nav variant="tabs" className="user-nav">
-                <Nav.Item className="user-nav__item">
-                  <LinkContainer to={`${url}/pet`}>
-                    <Nav.Link eventKey="pet-list" className="user-nav__link">
-                      Pet list
-                    </Nav.Link>
-                  </LinkContainer>
-                </Nav.Item>
+      <Switch>
+        {!isAuthenticated && <Redirect to="/login" />}
 
-                <Nav.Item className="user-nav__item">
-                  <LinkContainer to={`${url}/setting`}>
-                    <Nav.Link eventKey="setting" className="user-nav__link">
-                      Account setting
-                    </Nav.Link>
-                  </LinkContainer>
-                </Nav.Item>
-              </Nav>
-            </Col>
-          </Row>
+        <Route path={`${path}/pet/:mode/:id?`} component={PetForm} />
+        <Route path={`${path}/pet`} component={UserPetList} />
+        <Route path={`${path}/setting`} component={UserSetting} />
 
-          <Row>
-            <Col>
-              <Switch>
-                {!isAuthenticated && <Redirect to="/login" />}
-
-                <Route path={`${path}/pet/:mode/:id?`} component={PetForm} />
-                <Route path={`${path}/pet`} component={UserPetList} />
-                <Route path={`${path}/setting`} component={UserSetting} />
-
-                <Redirect exact from="/user" to="/user/pet" />
-              </Switch>
-            </Col>
-          </Row>
-        </Container>
-      </main>
+        <Redirect exact from="/user" to="/user/pet" />
+      </Switch>
     );
   }
 }

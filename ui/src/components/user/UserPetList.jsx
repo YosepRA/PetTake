@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import '../../css/user-pet-list.min.css';
 
@@ -11,6 +11,7 @@ import PetCard from '../PetCard';
 import Pagination from '../Pagination';
 import NoDataFound from '../NoDataFound';
 import withSearchToVariables from '../withSearchToVariables';
+import DashboardNav from './DashboardNav';
 
 const demoPetIds = [
   '60c48b54bebb4f117cb118d5',
@@ -82,27 +83,41 @@ class UserPetList extends Component {
     const { userPetList } = this.props;
 
     return (
-      <section className="user-pet">
-        <ListControl newButton className="user-pet__control" />
-
-        <div className="user-pet__list">
+      <main className="main-container">
+        <Container>
           <Row>
-            {userPetList.length === 0 ? (
-              <Col>
-                <NoDataFound />
-              </Col>
-            ) : (
-              createPetItems(userPetList, this.handleDelete)
-            )}
+            <Col>
+              <DashboardNav />
+            </Col>
           </Row>
-        </div>
 
-        <Pagination
-          currentPage={1}
-          totalPage={42}
-          className="user-pet__pagination"
-        />
-      </section>
+          <Row>
+            <Col>
+              <section className="user-pet">
+                <ListControl newButton className="user-pet__control" />
+
+                <div className="user-pet__list">
+                  <Row>
+                    {userPetList.length === 0 ? (
+                      <Col>
+                        <NoDataFound />
+                      </Col>
+                    ) : (
+                      createPetItems(userPetList, this.handleDelete)
+                    )}
+                  </Row>
+                </div>
+
+                <Pagination
+                  currentPage={1}
+                  totalPage={42}
+                  className="user-pet__pagination"
+                />
+              </section>
+            </Col>
+          </Row>
+        </Container>
+      </main>
     );
   }
 }

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import '../../css/user-account.min.css';
 
 import UserBasicSetting from './UserBasicSetting';
 import UserPasswordSetting from './UserPasswordSetting';
+import DashboardNav from './DashboardNav';
 
 export default class UserPetList extends Component {
   componentDidMount() {
@@ -16,10 +18,24 @@ export default class UserPetList extends Component {
 
   render() {
     return (
-      <section className="user-account">
-        <UserBasicSetting />
-        <UserPasswordSetting />
-      </section>
+      <main className="main-container">
+        <Container>
+          <Row>
+            <Col>
+              <DashboardNav />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <section className="user-account">
+                <UserBasicSetting />
+                <UserPasswordSetting />
+              </section>
+            </Col>
+          </Row>
+        </Container>
+      </main>
     );
   }
 }

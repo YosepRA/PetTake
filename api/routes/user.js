@@ -7,6 +7,27 @@ const router = express.Router();
 
 /* ========== Routes ========== */
 
+// Parse user info based on session state.
+router.get('/', (req, res) => {
+  if (!req.isAuthenticated()) return res.json({ success: false });
+
+  const {
+    user: { username, email, name, phone, address },
+  } = req;
+  const userData = {
+    username,
+    email,
+    name,
+    phone,
+    address,
+  };
+
+  return res.json({
+    success: true,
+    user: userData,
+  });
+});
+
 // User register.
 router.post('/register', async (req, res) => {
   try {

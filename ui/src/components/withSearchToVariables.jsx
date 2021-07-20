@@ -11,6 +11,7 @@ const controlKeys = [
   { key: 'sort', dataType: 'string' },
 ];
 
+// Convert URL search params to GraphQL variables.
 function paramsToVariables(search) {
   const params = new URLSearchParams(search);
   const variables = {};

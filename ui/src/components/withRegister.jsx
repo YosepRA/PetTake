@@ -24,12 +24,16 @@ function withRegister(WrappedComponent) {
     }
 
     handleFormSubmit = (values) => {
-      const { setAuthenticate, handleClose, history } = this.props;
+      const { setAuthenticate, modal, handleClose, history } = this.props;
 
       this.toggleError(false, '', async () => {
         // We don't need passwordrepeat.
         const { passwordRepeat, ...user } = values;
-        const result = await dataSource.postData('/user/register', { user });
+        const result = await dataSource.postData(
+          '/user/register',
+          { user },
+          { withCredentials: true },
+        );
         // If it's failed (unique data clash).
         if (!result.success) {
           this.toggleError(true, result.message);
@@ -38,7 +42,7 @@ function withRegister(WrappedComponent) {
 
         setAuthenticate(true, result.user);
         // Close modal.
-        handleClose();
+        if (modal && handleClose) handleClose();
         history.push('/user');
 
         return undefined;

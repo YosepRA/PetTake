@@ -24,10 +24,12 @@ function withLogin(WrappedComponent) {
     }
 
     handleFormSubmit = (values) => {
-      const { setAuthenticate, handleClose, history } = this.props;
+      const { setAuthenticate, modal, handleClose, history } = this.props;
 
       this.toggleError(false, '', async () => {
-        const result = await dataSource.postData('/user/login', values);
+        const result = await dataSource.postData('/user/login', values, {
+          withCredentials: true,
+        });
         // If it's failed (incorrect username or password).
         if (!result.success) {
           this.toggleError(true, result.message);
@@ -36,7 +38,7 @@ function withLogin(WrappedComponent) {
 
         setAuthenticate(true, result.user);
         // Close modal.
-        handleClose();
+        if (modal && handleClose) handleClose();
         history.push('/user');
 
         return undefined;

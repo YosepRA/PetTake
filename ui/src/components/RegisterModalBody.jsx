@@ -36,7 +36,7 @@ function RegisterModalBody(props) {
           {({ handleSubmit }) => (
             <Form noValidate onSubmit={handleSubmit}>
               <Form.Group controlId="name">
-                <Form.Label>Name</Form.Label>
+                <Form.Label>Full Name</Form.Label>
                 <Field name="name">
                   {({ field }) => <Form.Control {...field} />}
                 </Field>

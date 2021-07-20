@@ -251,7 +251,7 @@ export default class PetForm extends Component {
     } = this.props;
     const { status, initialValues } = this.state;
     // Using key to force update Formik component.
-    // It won't re-render even with new initialValues.
+    // I use this because it won't re-render even with new initialValues.
     const formikKey = status === 'loaded' ? `${id}-${status}` : id;
     const breedOptions = createSelectOptions(breeds);
 

@@ -26,7 +26,13 @@ mongoConnect();
 // ===== Midldewares ======
 
 app.use(express.json());
-app.use(cors());
+// Set CORS credentials accordingly on production build.
+app.use(
+  cors({
+    origin: 'http://localhost:8000',
+    credentials: true,
+  }),
+);
 app.use(
   session({
     secret: sessionSecret,
