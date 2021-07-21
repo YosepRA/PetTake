@@ -22,6 +22,7 @@ export default function withModal(WrappedComponent) {
 
       return (
         <WrappedComponent
+          {...this.props}
           isOpen={isOpen}
           handleShow={this.handleShow}
           handleClose={this.handleClose}

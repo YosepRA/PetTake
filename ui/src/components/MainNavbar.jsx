@@ -4,10 +4,22 @@ import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from 'react-redux';
 
 import UserModal from './UserModal';
+import DataSource from './store/DataSource';
+import actionCreator from './store/actionCreator';
 
-export default class MainNavbar extends Component {
+const dataSource = new DataSource();
+
+const mapStateToProps = ({ isAuthenticated }) => ({
+  isAuthenticated,
+});
+const mapDispathToProps = {
+  setAuthenticate: actionCreator.setAuthenticate,
+};
+
+class MainNavbar extends Component {
   constructor() {
     super();
     this.state = {
@@ -49,6 +61,19 @@ export default class MainNavbar extends Component {
     }
   };
 
+  handleLogout = async () => {
+    const { setAuthenticate } = this.props;
+
+    const result = await dataSource.getData('/user/logout', {
+      withCredentials: true,
+    });
+
+    if (result.success) {
+      this.toggleMenu(false);
+      setAuthenticate(false);
+    }
+  };
+
   createLinks = (links) =>
     links.map(({ label, props }) => (
       <NavLink {...props} key={label} onClick={() => this.toggleMenu(false)}>
@@ -58,6 +83,7 @@ export default class MainNavbar extends Component {
 
   render() {
     const { isOpen } = this.state;
+    const { isAuthenticated } = this.props;
     const pagesLinks = this.createLinks(this.pagesLinks);
 
     return (
@@ -97,7 +123,19 @@ export default class MainNavbar extends Component {
                 <div className="navbar__menu-pages">{pagesLinks}</div>
 
                 <div className="navbar__menu-user">
-                  <UserModal />
+                  {isAuthenticated ? (
+                    <div className="navbar__menu-user-authed">
+                      <button
+                        type="button"
+                        className="navbar__menu-item navbar__menu-button"
+                        onClick={this.handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <UserModal toggleMenu={this.toggleMenu} />
+                  )}
                 </div>
               </section>
             </Container>
@@ -107,3 +145,5 @@ export default class MainNavbar extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispathToProps)(MainNavbar);

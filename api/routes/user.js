@@ -83,6 +83,11 @@ router.post('/login', authenticateLogin, (req, res) => {
   });
 });
 
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.json({ success: true });
+});
+
 // Protected route demo route. Delete if not needed.
 // router.get('/protect', isLoggedIn, (req, res) => {
 //   res.send('You have successfully entered the protected route.');

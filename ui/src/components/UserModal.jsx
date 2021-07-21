@@ -15,9 +15,12 @@ class UserModal extends Component {
   }
 
   handleModalShow = (page) => {
-    const { handleShow } = this.props;
+    const { handleShow, toggleMenu } = this.props;
 
     this.setState({ page });
+    // Close menu.
+    toggleMenu(false);
+    // SHow modal.
     handleShow();
   };
 
@@ -30,7 +33,7 @@ class UserModal extends Component {
     const { isOpen, handleClose } = this.props;
 
     return (
-      <>
+      <div className="navbar__menu-user-no-authed">
         <button
           type="button"
           className="navbar__menu-item navbar__menu-button"
@@ -82,7 +85,7 @@ class UserModal extends Component {
             />
           )}
         </Modal>
-      </>
+      </div>
     );
   }
 }
