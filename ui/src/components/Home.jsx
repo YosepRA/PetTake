@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -11,20 +12,20 @@ import Pagination from './Pagination';
 import NoDataFound from './NoDataFound';
 import withSearchToVariables from './withSearchToVariables';
 
-function createPetItems(petArray) {
-  return petArray.map((pet) => (
-    <Col key={pet.name} sm="6" md="4">
-      <PetCard pet={pet} baseUrl="/pet" />
-    </Col>
-  ));
-}
-
 const mapStateToProps = ({ petList }) => ({
   petList,
 });
 const mapDispatchToProps = {
   getPetList: actionCreator.getPetList,
 };
+
+function createPetItems(petArray) {
+  return petArray.map((pet) => (
+    <Col key={pet._id} sm="6" md="4">
+      <PetCard pet={pet} baseUrl="/pet" />
+    </Col>
+  ));
+}
 
 class Home extends Component {
   componentDidMount() {
@@ -34,10 +35,20 @@ class Home extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { variables: prevVars } = prevProps;
-    const { variables: currentVars } = this.props;
+    const {
+      variables: prevVars,
+      match: {
+        params: { page: prevPage },
+      },
+    } = prevProps;
+    const {
+      variables: currentVars,
+      match: {
+        params: { page: currentPage },
+      },
+    } = this.props;
 
-    if (prevVars !== currentVars) this.loadData();
+    if (prevVars !== currentVars || prevPage !== currentPage) this.loadData();
   }
 
   componentWillUnmount() {
@@ -45,14 +56,23 @@ class Home extends Component {
   }
 
   loadData = () => {
-    const { getPetList, variables } = this.props;
+    const {
+      getPetList,
+      variables,
+      match: {
+        params: { page },
+      },
+    } = this.props;
+    const gqlVariables = { ...variables, page: Number(page) };
 
-    getPetList(variables);
+    getPetList(gqlVariables);
   };
 
   render() {
-    const { petList } = this.props;
-    const petItems = createPetItems(petList);
+    const {
+      petList: { docs },
+    } = this.props;
+    const petItems = createPetItems(docs);
 
     return (
       <main className="main-container">
@@ -73,13 +93,13 @@ class Home extends Component {
 
             <Row>
               <Col>
-                <ListControl urlBase="/" className="pet-list__control" />
+                <ListControl baseUrl="/home" className="pet-list__control" />
               </Col>
             </Row>
 
             <div className="pet-list__items">
               <Row>
-                {petList.length === 0 ? (
+                {docs.length === 0 ? (
                   <Col>
                     <NoDataFound />
                   </Col>
@@ -89,11 +109,7 @@ class Home extends Component {
               </Row>
             </div>
 
-            <Pagination
-              currentPage={1}
-              totalPage={42}
-              className="pet-list__pagination"
-            />
+            <Pagination baseUrl="/home" className="pet-list__pagination" />
           </Container>
         </section>
       </main>

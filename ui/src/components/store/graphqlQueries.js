@@ -11,6 +11,7 @@ const queries = {
       $preferHomeWithout: [String]
       $health: [String]
       $sort: String
+      $page: Int
     ) {
       petList(
         breed: $breed
@@ -21,12 +22,18 @@ const queries = {
         preferHomeWithout: $preferHomeWithout
         health: $health
         sort: $sort
+        page: $page
       ) {
-        _id
-        name
-        breed
-        images {
-          path
+        page
+        pages
+        total
+        docs {
+          _id
+          name
+          breed
+          images {
+            path
+          }
         }
       }
     }
@@ -57,7 +64,6 @@ const queries = {
   `,
   [actionTypes.USER_PET_LIST]: `
     query userPetList(
-      $petIds: [ID]!
       $breed: String
       $age: String
       $gender: String
@@ -66,9 +72,9 @@ const queries = {
       $preferHomeWithout: [String]
       $health: [String]
       $sort: String
+      $page: Int
     ) {
       userPetList(
-        petIds: $petIds
         breed: $breed
         age: $age
         gender: $gender
@@ -77,12 +83,18 @@ const queries = {
         preferHomeWithout: $preferHomeWithout
         health: $health
         sort: $sort
+        page: $page
       ) {
-        _id
-        name
-        breed
-        images {
-          path
+        page
+        pages
+        total
+        docs {
+          _id
+          name
+          breed
+          images {
+            path
+          }
         }
       }
     }

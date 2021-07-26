@@ -29,8 +29,7 @@ class MainNavbar extends Component {
       {
         label: 'Home',
         props: {
-          to: '/',
-          exact: true,
+          to: '/home',
           className: 'navbar__menu-item navbar__menu-link',
         },
       },

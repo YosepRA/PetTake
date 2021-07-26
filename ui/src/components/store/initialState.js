@@ -1,7 +1,17 @@
 const initialState = {
-  petList: [],
+  petList: {
+    page: 0,
+    pages: 0,
+    total: 0,
+    docs: [],
+  },
   petDetails: {},
-  userPetList: [],
+  userPetList: {
+    page: 0,
+    pages: 0,
+    total: 0,
+    docs: [],
+  },
   user: {
     username: '',
     email: '',

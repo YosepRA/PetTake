@@ -11,7 +11,7 @@ const breeds = [
   'Dogo Guatemalteco',
   'Cretan Hound',
 ];
-const ages = ['Puppy', 'Young', 'Adult', 'Senior'];
+const ages = ['Puppy', 'Young', 'Mature'];
 const genders = ['Male', 'Female'];
 const coatLengths = ['Short', 'Medium', 'Long'];
 const preferHomes = ['Other dogs', 'Other cats', 'Children'];

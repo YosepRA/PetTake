@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 // Axios global defaults.
-// axios.defaults.withCredentials = 'include';
+axios.defaults.withCredentials = 'include';
 
-const API_ENDPOINT = 'http://localhost:3000';
+const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || '';
 const GRAPHQL_ENDPOINT = `${API_ENDPOINT}/graphql`;
 
 class DataSource {

@@ -23,15 +23,15 @@ class ListControl extends Component {
   }
 
   handleReset = () => {
-    const { urlBase, history } = this.props;
+    const { baseUrl, history } = this.props;
 
     this.setState(initialState, () => {
-      history.push(urlBase);
+      history.push(baseUrl);
     });
   };
 
   applyControl = (changes) => {
-    const { urlBase, history } = this.props;
+    const { baseUrl, history } = this.props;
 
     this.setState(changes, () => {
       const controls = this.state;
@@ -40,13 +40,13 @@ class ListControl extends Component {
       Object.keys(controls).forEach((key) => {
         const value = controls[key];
         const isArray = Array.isArray(value);
-        // If it's an array and it has values.
+        // Array-like params parse.
         if (isArray && value.length > 0) {
           value.forEach((arrayValue) => {
             params.append(key, arrayValue);
           });
         }
-        // If it's anything other than array and it has value.
+        // Non-array params parse.
         if (!isArray && value) {
           params.set(key, value);
         }
@@ -54,7 +54,7 @@ class ListControl extends Component {
       const search = params.toString() ? `?${params.toString()}` : '';
 
       history.push({
-        pathname: urlBase,
+        pathname: `${baseUrl}/1`,
         search,
       });
     });
@@ -77,7 +77,7 @@ class ListControl extends Component {
 
         {newButton && (
           <Link
-            to="/user/pet/new"
+            to="/user/pet/manage/new"
             className="btn list-control__btn list-control__btn--new"
           >
             <FontAwesomeIcon icon="plus" /> New

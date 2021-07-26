@@ -3,6 +3,8 @@ import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { API_ENDPOINT } from './store/DataSource';
+
 export default function PetCard({
   pet: { _id, name, breed, images },
   baseUrl,
@@ -18,7 +20,11 @@ export default function PetCard({
   return (
     <Card className="pet">
       <Link to={linkUrl}>
-        <Card.Img variant="top" src={images[0].path} className="pet__image" />
+        <Card.Img
+          variant="top"
+          src={`${API_ENDPOINT}${images[0].path}`}
+          className="pet__image"
+        />
       </Link>
 
       <Card.Body className="pet__body">

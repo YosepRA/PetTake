@@ -13,17 +13,8 @@ import NoDataFound from '../NoDataFound';
 import withSearchToVariables from '../withSearchToVariables';
 import DashboardNav from './DashboardNav';
 
-const demoPetIds = [
-  '60c48b54bebb4f117cb118d5',
-  '60c48b54bebb4f117cb118db',
-  '60c48b54bebb4f117cb118df',
-  '60c48b54bebb4f117cb118e1',
-  '60c48b54bebb4f117cb118d9',
-];
-
-const mapStateToProps = ({ userPetList, user }) => ({
+const mapStateToProps = ({ userPetList }) => ({
   userPetList,
-  petIds: user.pets,
 });
 const mapDispatchToProps = {
   getUserPetList: actionCreator.getUserPetList,
@@ -35,7 +26,7 @@ function createPetItems(petArray, handleDelete) {
     <Col key={pet._id} sm="6" md="4">
       <PetCard
         pet={pet}
-        baseUrl="/user/pet/edit"
+        baseUrl="/user/pet/manage/edit"
         handleDelete={handleDelete}
         controlOverlay
       />
@@ -51,10 +42,20 @@ class UserPetList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { variables: prevVars } = prevProps;
-    const { variables: currentVars } = this.props;
+    const {
+      variables: prevVars,
+      match: {
+        params: { page: prevPage },
+      },
+    } = prevProps;
+    const {
+      variables: currentVars,
+      match: {
+        params: { page: currentPage },
+      },
+    } = this.props;
 
-    if (prevVars !== currentVars) this.loadData();
+    if (prevVars !== currentVars || prevPage !== currentPage) this.loadData();
   }
 
   componentWillUnmount() {
@@ -72,15 +73,22 @@ class UserPetList extends Component {
   };
 
   loadData = () => {
-    const { getUserPetList, variables } = this.props;
-    // Change demo ids later...
-    const userPetListVars = { ...variables, petIds: demoPetIds };
+    const {
+      getUserPetList,
+      variables,
+      match: {
+        params: { page },
+      },
+    } = this.props;
+    const gqlVariables = { ...variables, page: Number(page) };
 
-    getUserPetList(userPetListVars);
+    getUserPetList(gqlVariables);
   };
 
   render() {
-    const { userPetList } = this.props;
+    const {
+      userPetList: { docs },
+    } = this.props;
 
     return (
       <main className="main-container">
@@ -94,23 +102,26 @@ class UserPetList extends Component {
           <Row>
             <Col>
               <section className="user-pet">
-                <ListControl newButton className="user-pet__control" />
+                <ListControl
+                  baseUrl="/user/pet"
+                  newButton
+                  className="user-pet__control"
+                />
 
                 <div className="user-pet__list">
                   <Row>
-                    {userPetList.length === 0 ? (
+                    {docs.length === 0 ? (
                       <Col>
                         <NoDataFound />
                       </Col>
                     ) : (
-                      createPetItems(userPetList, this.handleDelete)
+                      createPetItems(docs, this.handleDelete)
                     )}
                   </Row>
                 </div>
 
                 <Pagination
-                  currentPage={1}
-                  totalPage={42}
+                  baseUrl="/user/pet"
                   className="user-pet__pagination"
                 />
               </section>

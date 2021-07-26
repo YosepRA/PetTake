@@ -13,11 +13,13 @@ const { dbConnection } = mongoConnect();
 
 faker.seed(100);
 
+const args = process.argv.length > 2 ? process.argv.slice(2) : [];
+
 const demoUser = {
-  username: 'bigjoe',
-  email: 'bigjoe@mail.com',
-  password: 'password',
-  name: 'Big Joe',
+  username: 'joe',
+  email: 'joe@mail.com',
+  password: 'joe',
+  name: 'Joe',
   phone: '+1 123 1234',
   address: '3434 Bubby Drive Taylor, TX 76574',
 };
@@ -29,36 +31,62 @@ const breeds = [
   'Dogo Guatemalteco',
   'Cretan Hound',
 ];
-const ages = ['Puppy', 'Young', 'Adult', 'Senior'];
+const ages = ['Puppy', 'Young', 'Mature'];
 const genders = ['Male', 'Female'];
 const coatLengths = ['Short', 'Medium', 'Long'];
 const preferHomes = ['Other dogs', 'Other cats', 'Children'];
 const healths = ['Spayed/Neutered', 'Vaccinated'];
+
+// Live images.
+// const images = [
+//   {
+//     path:
+//       'https://images.unsplash.com/photo-1552053831-71594a27632d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8ZG9nfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+//     filename: 'foobar',
+//   },
+//   {
+//     path:
+//       'https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NHx8ZG9nfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+//     filename: 'foobar',
+//   },
+//   {
+//     path:
+//       'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTN8fGRvZ3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+//     filename: 'foobar',
+//   },
+//   {
+//     path:
+//       'https://images.unsplash.com/photo-1529429617124-95b109e86bb8?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTV8fGRvZ3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+//     filename: 'foobar',
+//   },
+//   {
+//     path:
+//       'https://images.unsplash.com/photo-1568393691622-c7ba131d63b4?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MjB8fGRvZ3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+//     filename: 'foobar',
+//   },
+// ];
+
+// Dev images.
 const images = [
   {
-    path:
-      'https://images.unsplash.com/photo-1552053831-71594a27632d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8ZG9nfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    filename: 'foobar',
+    path: '/uploads/pet-01.jpg',
+    filename: 'pet-01.jpg',
   },
   {
-    path:
-      'https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NHx8ZG9nfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    filename: 'foobar',
+    path: '/uploads/pet-02.jpg',
+    filename: 'pet-02.jpg',
   },
   {
-    path:
-      'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTN8fGRvZ3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    filename: 'foobar',
+    path: '/uploads/pet-03.jpg',
+    filename: 'pet-03.jpg',
   },
   {
-    path:
-      'https://images.unsplash.com/photo-1529429617124-95b109e86bb8?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTV8fGRvZ3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    filename: 'foobar',
+    path: '/uploads/pet-04.jpg',
+    filename: 'pet-04.jpg',
   },
   {
-    path:
-      'https://images.unsplash.com/photo-1568393691622-c7ba131d63b4?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MjB8fGRvZ3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-    filename: 'foobar',
+    path: '/uploads/pet-05.jpg',
+    filename: 'pet-05.jpg',
   },
 ];
 
@@ -117,16 +145,20 @@ async function mongoInit() {
   await Pet.deleteMany({});
   await User.deleteMany({});
 
-  const user = await User.create(demoUser);
-  const pets = generatePets(5, user);
+  const { password, ...userData } = demoUser;
+  const newUser = new User(userData);
+  const petAmount = args[0] ? Number(args[0]) : 10;
+
+  const registeredUser = await User.register(newUser, password);
+  const pets = generatePets(petAmount, registeredUser);
   const createdPets = await Pet.create(pets);
   console.log(
     `Successful data initialization with ${createdPets.length} pets.`,
   );
 
   // Insert pets references to user.
-  user.pets = createdPets;
-  await user.save();
+  registeredUser.pets = createdPets;
+  await registeredUser.save();
 }
 
 mongoInit().then(() => dbConnection.close());

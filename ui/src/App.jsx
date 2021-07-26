@@ -84,7 +84,7 @@ class App extends Component {
           <MainNavbar />
 
           <Switch>
-            <Route path="/" exact component={Home} />
+            <Route path="/home/:page" component={Home} />
             <Route path="/pet/:id" component={PetDetails} />
             <Route path="/contact" component={Contact} />
             <Route path="/register" component={Register} />
@@ -92,7 +92,8 @@ class App extends Component {
 
             <Route path="/user" component={UserSwitch} />
 
-            <Redirect to="/" />
+            <Redirect from="/home" to="/home/1" />
+            <Redirect to="/home/1" />
           </Switch>
 
           <Footer />
@@ -101,31 +102,5 @@ class App extends Component {
     );
   }
 }
-
-// export default function App() {
-//   return (
-//     <div>
-//       <Router>
-//         <ScrollToTop />
-
-//         <MainNavbar />
-
-//         <Switch>
-//           <Route path="/" exact component={Home} />
-//           <Route path="/pet/:id" component={PetDetails} />
-//           <Route path="/contact" component={Contact} />
-//           <Route path="/register" component={Register} />
-//           <Route path="/login" component={Login} />
-
-//           <Route path="/user" component={UserSwitch} />
-
-//           <Redirect to="/" />
-//         </Switch>
-
-//         <Footer />
-//       </Router>
-//     </div>
-//   );
-// }
 
 export default connect(null, mapDispatchToProps)(App);

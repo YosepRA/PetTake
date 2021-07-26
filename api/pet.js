@@ -1,12 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 
-const mongoose = require('mongoose');
-
 const Pet = require('./models/Pet');
 const User = require('./models/User');
-
-// Will be changed later based on signed in user.
-const demoUser = { username: 'bigjoe' };
 
 // ===== Helpers =====
 
@@ -37,10 +32,14 @@ function buildFilter(filterList) {
 
 // ===== Query resolvers =====
 
-async function list(_, { sort = '-createdDate', ...restFilter }) {
+async function list(_, { sort = '-createdDate', page = 1, ...restFilter }) {
   const filter = buildFilter(restFilter);
 
-  const petList = await Pet.find(filter).sort(sort);
+  const paginateOptions = {
+    sort,
+    page,
+  };
+  const petList = await Pet.paginate(filter, paginateOptions);
 
   return petList;
 }
@@ -51,27 +50,38 @@ async function details(_, { _id }) {
   return pet;
 }
 
-async function userPetList(_, { petIds, sort, ...restFilter }) {
-  const ids = petIds.map((id) => mongoose.Types.ObjectId(id));
+async function userPetList(
+  _,
+  { sort = '-createdDate', page = 1, ...restFilter },
+  { username },
+) {
+  const user = await User.findByUsername(username);
   const filter = buildFilter(restFilter);
 
-  filter._id = { $in: ids };
+  filter._id = { $in: user.pets };
+  const paginateOptions = {
+    sort,
+    page,
+  };
 
-  const petList = await Pet.find(filter).sort(sort);
+  const petList = await Pet.paginate(filter, paginateOptions);
 
   return petList;
 }
 
 // ===== Mutation resolvers =====
 
-async function create(_, args) {
+async function create(_, args, { username }) {
   const pet = { ...args.pet };
-  const user = await User.findOne({ username: demoUser.username });
+  const user = await User.findOne({ username });
 
   pet.createdDate = Date.now();
   pet.author = user;
 
   const newPet = await Pet.create(pet);
+
+  user.pets.push(newPet.id);
+  await user.save();
 
   return newPet;
 }

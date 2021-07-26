@@ -75,7 +75,7 @@ export default function withSearchToVariables(WrappedComponent) {
     render() {
       const { variables } = this.state;
 
-      return <WrappedComponent variables={variables} />;
+      return <WrappedComponent {...this.props} variables={variables} />;
     }
   };
 }

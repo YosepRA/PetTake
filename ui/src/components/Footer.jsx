@@ -21,7 +21,7 @@ export default function Footer() {
           <ul className="sitemap__list">
             <li className="sitemap__list-item">
               <Link
-                to="/"
+                to="/home"
                 className="sitemap__list-link sitemap__list-link__home"
               >
                 Home

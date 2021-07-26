@@ -34,6 +34,13 @@ type Image {
   filename: String!
 }
 
+type PetListWithPage {
+  page: Int!
+  pages: Int!
+  total: Int!
+  docs: [Pet!]!
+}
+
 ##### INPUT TYPES #####
 
 input PetInput {
@@ -79,10 +86,10 @@ type Query {
     preferHomeWithout: [String]
     health: [String]
     sort: String
-  ): [Pet!]!
+    page: Int
+  ): PetListWithPage!
   pet(_id: ID!): Pet!
   userPetList(
-    petIds: [ID]!
     breed: String
     age: String
     gender: String
@@ -91,7 +98,8 @@ type Query {
     preferHomeWithout: [String]
     health: [String]
     sort: String
-  ): [Pet]!
+    page: Int
+  ): PetListWithPage!
 }
 
 type Mutation {

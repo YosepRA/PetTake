@@ -27,7 +27,7 @@ const reducer = produce((draft, action) => {
       if (!action.payload.data) {
         throw new Error('Pet is not found.');
       }
-      draft.userPetList = draft.userPetList.filter(
+      draft.userPetList.docs = draft.userPetList.docs.filter(
         (pet) => pet._id !== action.payload._id,
       );
       break;

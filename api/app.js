@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 const mongoConnect = require('./mongoConnect');
 const startApolloServer = require('./apiHandler');
@@ -38,6 +39,10 @@ app.use(
     secret: sessionSecret,
     saveUninitialized: false,
     resave: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URL,
+      ttl: 7 * 24 * 60 * 60,
+    }),
   }),
 );
 

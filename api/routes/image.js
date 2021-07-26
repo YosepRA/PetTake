@@ -50,7 +50,10 @@ router.delete('/', async (req, res) => {
 
     res.json({ success: true });
   } catch (error) {
-    res.status(404).send('Image is not found.');
+    res.json({
+      success: false,
+      message: error.message,
+    });
   }
 });
 
