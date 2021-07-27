@@ -9,6 +9,7 @@ const mongoConnect = require('./mongoConnect');
 const startApolloServer = require('./apiHandler');
 const passport = require('./passport');
 
+const indexRouter = require('./routes');
 const imageRouter = require('./routes/image');
 const userRouter = require('./routes/user');
 
@@ -56,6 +57,8 @@ app.use(passport.session());
 // ===== Routes ======
 
 startApolloServer(app);
+
+app.use('/', indexRouter);
 app.use('/image', imageRouter);
 app.use('/user', userRouter);
 

@@ -3,7 +3,12 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { Formik, Field } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import '../css/contact.min.css';
+import DataSource from './store/DataSource';
+import FormErrorMessage from './FormErrorMessage';
+
+const dataSource = new DataSource();
 
 const initialValues = {
   name: '',
@@ -50,6 +55,16 @@ function createFormFields(data) {
 }
 
 export default class Contact extends Component {
+  constructor() {
+    super();
+    this.state = {
+      error: {
+        show: false,
+        message: '',
+      },
+    };
+  }
+
   componentDidMount() {
     document.body.classList.add('page-contact');
   }
@@ -58,11 +73,32 @@ export default class Contact extends Component {
     document.body.classList.remove('page-contact');
   }
 
-  handleSubmit = (values) => {
-    console.log(JSON.stringify(values, null, 2));
+  handleSubmit = async (values) => {
+    const { history } = this.props;
+
+    const result = await dataSource.postData('/message', values);
+
+    if (!result.success) {
+      this.setState({
+        error: {
+          show: true,
+          message: result.message,
+        },
+      });
+
+      return undefined;
+    }
+
+    history.push('/home');
+    alert('Thank you for your message.');
+
+    return undefined;
   };
 
   render() {
+    const {
+      error: { show, message },
+    } = this.state;
     const formFields = createFormFields(formModel);
 
     return (
@@ -103,6 +139,8 @@ export default class Contact extends Component {
             <Col xs="12" md="8" lg="7">
               <section className="form">
                 <h2 className="section-header form__header">Contact Form</h2>
+
+                {show && <FormErrorMessage message={message} />}
 
                 <Formik
                   initialValues={initialValues}
