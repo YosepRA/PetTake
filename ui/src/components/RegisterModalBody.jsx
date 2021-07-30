@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import { Formik, Field } from 'formik';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Formik } from 'formik';
+import { Modal } from 'react-bootstrap';
 
+import RegisterForm from './RegisterForm';
 import FormErrorMessage from './FormErrorMessage';
 import withRegister from './withRegister';
+import RegisterSchema from './helpers/yup/RegisterSchema';
 
 const initialValues = {
   name: '',
@@ -32,52 +34,18 @@ function RegisterModalBody(props) {
       <Modal.Body className="navbar__modal-body">
         {show && <FormErrorMessage message={message} />}
 
-        <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
-          {({ handleSubmit }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group controlId="name">
-                <Form.Label>Full Name</Form.Label>
-                <Field name="name">
-                  {({ field }) => <Form.Control {...field} />}
-                </Field>
-              </Form.Group>
-
-              <Form.Group controlId="username">
-                <Form.Label>Username</Form.Label>
-                <Field name="username">
-                  {({ field }) => <Form.Control {...field} />}
-                </Field>
-              </Form.Group>
-
-              <Form.Group controlId="email">
-                <Form.Label>Email</Form.Label>
-                <Field name="email">
-                  {({ field }) => <Form.Control {...field} type="email" />}
-                </Field>
-              </Form.Group>
-
-              <Form.Group controlId="password">
-                <Form.Label>Password</Form.Label>
-                <Field name="password">
-                  {({ field }) => <Form.Control {...field} type="password" />}
-                </Field>
-              </Form.Group>
-
-              <Form.Group controlId="password-repeat">
-                <Form.Label>Repeat password</Form.Label>
-                <Field name="passwordRepeat">
-                  {({ field }) => <Form.Control {...field} type="password" />}
-                </Field>
-              </Form.Group>
-
-              <Button
-                type="submit"
-                variant="primary"
-                className="navbar__modal-submit"
-              >
-                Register
-              </Button>
-            </Form>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={RegisterSchema}
+          onSubmit={handleFormSubmit}
+        >
+          {({ handleSubmit, errors, touched }) => (
+            <RegisterForm
+              handleSubmit={handleSubmit}
+              errors={errors}
+              touched={touched}
+              className="navbar__modal-form"
+            />
           )}
         </Formik>
       </Modal.Body>

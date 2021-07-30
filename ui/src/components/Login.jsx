@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import { Formik, Field } from 'formik';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Formik } from 'formik';
+import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import '../css/login.min.css';
+
+import LoginForm from './LoginForm';
 import FormErrorMessage from './FormErrorMessage';
 import withLogin from './withLogin';
+import LoginSchema from './helpers/yup/LoginSchema';
 
 const initialValues = {
   username: '',
@@ -39,37 +43,15 @@ class Login extends Component {
                 <Formik
                   initialValues={initialValues}
                   onSubmit={handleFormSubmit}
+                  validationSchema={LoginSchema}
                 >
-                  {({ handleSubmit }) => (
-                    <Form
-                      noValidate
-                      onSubmit={handleSubmit}
+                  {({ handleSubmit, touched, errors }) => (
+                    <LoginForm
+                      handleSubmit={handleSubmit}
+                      touched={touched}
+                      errors={errors}
                       className="panel__form"
-                    >
-                      <Form.Group controlId="username">
-                        <Form.Label>Username</Form.Label>
-                        <Field name="username">
-                          {({ field }) => <Form.Control {...field} />}
-                        </Field>
-                      </Form.Group>
-
-                      <Form.Group controlId="password">
-                        <Form.Label>Password</Form.Label>
-                        <Field name="password">
-                          {({ field }) => (
-                            <Form.Control {...field} type="password" />
-                          )}
-                        </Field>
-                      </Form.Group>
-
-                      <Button
-                        type="submit"
-                        variant="primary"
-                        className="panel__form-submit"
-                      >
-                        Login
-                      </Button>
-                    </Form>
+                    />
                   )}
                 </Formik>
 

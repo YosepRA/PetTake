@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Axios global defaults.
-axios.defaults.withCredentials = 'include';
+axios.defaults.withCredentials = true;
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || '';
 const GRAPHQL_ENDPOINT = `${API_ENDPOINT}/graphql`;

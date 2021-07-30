@@ -27,9 +27,7 @@ function withLogin(WrappedComponent) {
       const { setAuthenticate, modal, handleClose, history } = this.props;
 
       this.toggleError(false, '', async () => {
-        const result = await dataSource.postData('/user/login', values, {
-          withCredentials: true,
-        });
+        const result = await dataSource.postData('/user/login', values);
         // If it's failed (incorrect username or password).
         if (!result.success) {
           this.toggleError(true, result.message);

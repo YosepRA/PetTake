@@ -1,0 +1,7 @@
+@import './config';
+
+.page-login {
+  .panel {
+    @include user-auth-panel();
+  }
+}

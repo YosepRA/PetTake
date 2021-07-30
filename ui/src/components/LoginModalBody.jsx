@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import { Formik, Field } from 'formik';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Formik } from 'formik';
+import { Modal } from 'react-bootstrap';
 
+import LoginForm from './LoginForm';
 import FormErrorMessage from './FormErrorMessage';
 import withLogin from './withLogin';
+import LoginSchema from './helpers/yup/LoginSchema';
 
 const initialValues = {
   username: '',
@@ -29,31 +31,18 @@ function LoginModalBody(props) {
       {show && <FormErrorMessage message={message} />}
 
       <Modal.Body className="navbar__modal-body">
-        <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
-          {({ handleSubmit }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group controlId="username">
-                <Form.Label>Username</Form.Label>
-                <Field name="username">
-                  {({ field }) => <Form.Control {...field} />}
-                </Field>
-              </Form.Group>
-
-              <Form.Group controlId="password">
-                <Form.Label>Password</Form.Label>
-                <Field name="password">
-                  {({ field }) => <Form.Control {...field} type="password" />}
-                </Field>
-              </Form.Group>
-
-              <Button
-                type="submit"
-                variant="primary"
-                className="navbar__modal-submit"
-              >
-                Login
-              </Button>
-            </Form>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleFormSubmit}
+          validationSchema={LoginSchema}
+        >
+          {({ handleSubmit, touched, errors }) => (
+            <LoginForm
+              handleSubmit={handleSubmit}
+              touched={touched}
+              errors={errors}
+              className="navbar__modal-form"
+            />
           )}
         </Formik>
       </Modal.Body>

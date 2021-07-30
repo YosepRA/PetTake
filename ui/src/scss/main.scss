@@ -137,7 +137,7 @@ body {
 
   &__modal {
     .modal-dialog {
-      max-width: 370px;
+      max-width: 400px;
       margin: 0.5rem auto;
       padding: 0.5rem;
     }
@@ -167,9 +167,14 @@ body {
       font-size: 1.3rem;
     }
 
-    &-submit {
-      @include main-button();
-      width: 120px;
+    &-form {
+
+      &-submit {
+        @include main-button();
+        display: block;
+        width: 100%;
+        margin-top: 1.5rem;
+      }
     }
 
     &-footer {

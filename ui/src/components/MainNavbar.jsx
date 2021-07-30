@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 
@@ -40,13 +40,6 @@ class MainNavbar extends Component {
           className: 'navbar__menu-item navbar__menu-link',
         },
       },
-      {
-        label: 'User (remove later)',
-        props: {
-          to: '/user',
-          className: 'navbar__menu-item navbar__menu-link',
-        },
-      },
     ];
   }
 
@@ -61,15 +54,14 @@ class MainNavbar extends Component {
   };
 
   handleLogout = async () => {
-    const { setAuthenticate } = this.props;
+    const { setAuthenticate, history } = this.props;
 
-    const result = await dataSource.getData('/user/logout', {
-      withCredentials: true,
-    });
+    const result = await dataSource.getData('/user/logout');
 
     if (result.success) {
       this.toggleMenu(false);
       setAuthenticate(false);
+      history.push('/home');
     }
   };
 
@@ -123,7 +115,15 @@ class MainNavbar extends Component {
 
                 <div className="navbar__menu-user">
                   {isAuthenticated ? (
-                    <div className="navbar__menu-user-authed">
+                    <div className="navbar__menu-user-authenticated">
+                      <NavLink
+                        to="/user"
+                        className="navbar__menu-item navbar__menu-link"
+                        onClick={() => this.toggleMenu(false)}
+                      >
+                        Dashboard
+                      </NavLink>
+
                       <button
                         type="button"
                         className="navbar__menu-item navbar__menu-button"
@@ -145,4 +145,6 @@ class MainNavbar extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispathToProps)(MainNavbar);
+export default withRouter(
+  connect(mapStateToProps, mapDispathToProps)(MainNavbar),
+);

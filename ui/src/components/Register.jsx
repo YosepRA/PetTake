@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import { Formik, Field } from 'formik';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Formik } from 'formik';
+import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import '../css/register.min.css';
+
+import RegisterForm from './RegisterForm';
 import FormErrorMessage from './FormErrorMessage';
 import withRegister from './withRegister';
+import RegisterSchema from './helpers/yup/RegisterSchema';
 
 const initialValues = {
   name: '',
@@ -42,62 +46,15 @@ class Register extends Component {
                 <Formik
                   initialValues={initialValues}
                   onSubmit={handleFormSubmit}
+                  validationSchema={RegisterSchema}
                 >
-                  {({ handleSubmit }) => (
-                    <Form
-                      noValidate
-                      onSubmit={handleSubmit}
+                  {({ handleSubmit, touched, errors }) => (
+                    <RegisterForm
+                      handleSubmit={handleSubmit}
+                      touched={touched}
+                      errors={errors}
                       className="panel__form"
-                    >
-                      <Form.Group controlId="name">
-                        <Form.Label>Full Name</Form.Label>
-                        <Field name="name">
-                          {({ field }) => <Form.Control {...field} />}
-                        </Field>
-                      </Form.Group>
-
-                      <Form.Group controlId="username">
-                        <Form.Label>Username</Form.Label>
-                        <Field name="username">
-                          {({ field }) => <Form.Control {...field} />}
-                        </Field>
-                      </Form.Group>
-
-                      <Form.Group controlId="email">
-                        <Form.Label>Email</Form.Label>
-                        <Field name="email">
-                          {({ field }) => (
-                            <Form.Control {...field} type="email" />
-                          )}
-                        </Field>
-                      </Form.Group>
-
-                      <Form.Group controlId="password">
-                        <Form.Label>Password</Form.Label>
-                        <Field name="password">
-                          {({ field }) => (
-                            <Form.Control {...field} type="password" />
-                          )}
-                        </Field>
-                      </Form.Group>
-
-                      <Form.Group controlId="password-repeat">
-                        <Form.Label>Repeat password</Form.Label>
-                        <Field name="passwordRepeat">
-                          {({ field }) => (
-                            <Form.Control {...field} type="password" />
-                          )}
-                        </Field>
-                      </Form.Group>
-
-                      <Button
-                        type="submit"
-                        variant="primary"
-                        className="panel__form-submit"
-                      >
-                        Register
-                      </Button>
-                    </Form>
+                    />
                   )}
                 </Formik>
 

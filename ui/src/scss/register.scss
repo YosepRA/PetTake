@@ -1,0 +1,7 @@
+@import './config';
+
+.page-register {
+  .panel {
+    @include user-auth-panel();
+  }
+}

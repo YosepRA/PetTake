@@ -91,6 +91,10 @@ $light-grey: #cccccc;
   &:not(:disabled):not(.disabled):active {
     background-color: #ddd;
   }
+
+  &:disabled {
+    background-color: white;
+  }
 }
 
 @mixin image-input-card {
@@ -140,4 +144,36 @@ $light-grey: #cccccc;
 
 @mixin Blueberry {
   font-family: 'Blueberry Regular', sans-serif;
+}
+
+@mixin user-auth-panel {
+  max-width: 340px;
+  margin: 0 auto;
+
+  &__title {
+    margin-bottom: 1.2rem;
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  &__form {
+    margin-bottom: 0.6rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid $light-grey;
+
+    &-submit {
+      @include main-button();
+      display: block;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+  }
+
+  &__footer {
+    text-align: center;
+
+    p {
+      margin-bottom: 0;
+    }
+  }
 }

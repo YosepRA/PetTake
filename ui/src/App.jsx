@@ -67,9 +67,7 @@ class App extends Component {
   async componentDidMount() {
     const { setAuthenticate } = this.props;
 
-    const result = await dataSource.getData('/user', {
-      withCredentials: true,
-    });
+    const result = await dataSource.getData('/user');
     if (result.success) {
       setAuthenticate(true, result.user);
     }

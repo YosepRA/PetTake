@@ -29,11 +29,7 @@ function withRegister(WrappedComponent) {
       this.toggleError(false, '', async () => {
         // We don't need passwordrepeat.
         const { passwordRepeat, ...user } = values;
-        const result = await dataSource.postData(
-          '/user/register',
-          { user },
-          { withCredentials: true },
-        );
+        const result = await dataSource.postData('/user/register', { user });
         // If it's failed (unique data clash).
         if (!result.success) {
           this.toggleError(true, result.message);
