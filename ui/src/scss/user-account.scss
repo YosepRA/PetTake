@@ -78,6 +78,10 @@
         &--address {
           align-items: start;
         }
+
+        &__feedback {
+          grid-column: 2 / 3;
+        }
       }
 
       &__section {

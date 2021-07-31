@@ -16,7 +16,7 @@ const mapDispatchToProps = {
 
 function createCarouselItems(data, petName) {
   return data.map((image, index) => (
-    <Carousel.Item key={image.path} className="pet-carousel__item">
+    <Carousel.Item key={image.filename} className="pet-carousel__item">
       <img
         src={`${API_ENDPOINT}${image.path}`}
         alt={`${petName}-${index + 1}`}

@@ -15,25 +15,19 @@ class DataSource {
   }
 
   async graphQLFetch(query, variables = {}, options = {}) {
-    try {
-      const response = await this.sendRequest('POST', GRAPHQL_ENDPOINT, {
-        query,
-        variables,
-        options,
-      });
-      // Based on Axios response object schema.
-      const { data } = response;
-      if (data.errors && data.data === null) {
-        const error = data.errors[0];
-        throw new Error(error.message);
-      }
-
-      return data.data;
-    } catch (error) {
-      console.error('graphQLFetch error: ', error.message);
+    const response = await this.sendRequest('POST', GRAPHQL_ENDPOINT, {
+      query,
+      variables,
+      options,
+    });
+    // Based on Axios response object schema.
+    const { data } = response;
+    if (data.errors && data.data === null) {
+      const error = data.errors[0];
+      throw new Error(error.message);
     }
 
-    return undefined;
+    return data.data;
   }
 
   async getData(endPoint, options = {}) {

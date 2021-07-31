@@ -6,7 +6,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 
 const mongoConnect = require('./mongoConnect');
-const startApolloServer = require('./apiHandler');
+const startApolloServer = require('./graphql/apiHandler');
 const passport = require('./passport');
 
 const indexRouter = require('./routes');
@@ -22,6 +22,13 @@ if (!sessionSecret) {
   );
   sessionSecret = 'unsafe_secret';
 }
+const corsConfig = {
+  origin:
+    process.env.CORS_ORIGIN === 'true' ||
+    process.env.CORS_ORIGIN ||
+    'http://localhost:8000',
+  credentials: process.env.CORS_CREDENTIALS === 'true',
+};
 
 mongoConnect();
 
@@ -29,12 +36,7 @@ mongoConnect();
 
 app.use(express.json());
 // Set CORS credentials accordingly on production build.
-app.use(
-  cors({
-    origin: 'http://localhost:8000',
-    credentials: true,
-  }),
-);
+app.use(cors(corsConfig));
 app.use(
   session({
     secret: sessionSecret,

@@ -12,6 +12,7 @@ function LoginForm({ handleSubmit, touched, errors, className }) {
             <Form.Control
               {...field}
               isInvalid={touched.username && errors.username}
+              autoFocus
             />
           )}
         </Field>

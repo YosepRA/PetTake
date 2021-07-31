@@ -74,6 +74,13 @@ input ImageInput {
   filename: String!
 }
 
+input UserInfoUpdateInput {
+  email: String
+  name: String
+  phone: String
+  address: String
+}
+
 ##### TOP LEVEL DECLARATION #####
 
 type Query {
@@ -106,4 +113,6 @@ type Mutation {
   petCreate(pet: PetInput!): Pet!
   petUpdate(_id: ID!, changes: PetUpdateInput!): Pet!
   petDelete(_id: ID!): Boolean!
+  userInfoUpdate(changes: UserInfoUpdateInput!): User!
+  userChangePassword(oldPassword: String!, newPassword: String!): Boolean!
 }

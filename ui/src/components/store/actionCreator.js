@@ -21,6 +21,13 @@ const actionCreator = {
       variables,
     ),
   }),
+  userInfoUpdate: (variables) => ({
+    type: actionTypes.USER_INFO_UPDATE,
+    payload: dataSource.graphQLFetch(
+      mutations[actionTypes.USER_INFO_UPDATE],
+      variables,
+    ),
+  }),
   deletePet: async (_id) => {
     const data = await dataSource.graphQLFetch(
       mutations[actionTypes.PET_DELETE],

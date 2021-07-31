@@ -1,7 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 
-const Pet = require('./models/Pet');
-const User = require('./models/User');
+const fsPromises = require('fs').promises;
+
+const Pet = require('../models/Pet');
+const User = require('../models/User');
 
 // ===== Helpers =====
 
@@ -15,7 +17,7 @@ function buildFilter(filterList) {
 
   const filter = { ...restFilter };
 
-  /* Filters that contain array of data. Adjust it so that it will filter out 
+  /* Filters that contain array of data. Adjust it so that it will filter out
   data which has a value from within the array. */
   if (preferHomeWith) {
     filter.preferHomeWith = { $all: preferHomeWith };
@@ -93,8 +95,20 @@ async function update(_, { _id, changes }) {
   return updatedPet;
 }
 
-async function remove(_, { _id }) {
+async function remove(_, { _id }, { username }) {
+  const user = await User.findByUsername(username);
+
+  // Delete pet item.
   const result = await Pet.findByIdAndDelete(_id);
+
+  // Delete uploaded images.
+  result.images.forEach(async ({ filename }) => {
+    await fsPromises.unlink(`./public/uploads/${filename}`);
+  });
+
+  // Delete frpm user's pet list.
+  user.pets = user.pets.filter((petId) => petId.toString() !== _id);
+  await user.save();
 
   if (result) return true;
 

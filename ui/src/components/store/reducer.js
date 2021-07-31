@@ -19,6 +19,10 @@ const reducer = produce((draft, action) => {
       draft.userPetList = action.payload.userPetList;
       break;
 
+    case actionTypes.USER_INFO_UPDATE:
+      draft.user = { ...action.payload.userInfoUpdate };
+      break;
+
     // Use this if you want to manually filter user pet list.
     // Other option will be refetching the data and relying on database as the ~
     // ~ source of truth.

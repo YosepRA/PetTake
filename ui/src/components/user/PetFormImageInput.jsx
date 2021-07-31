@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { Component } from 'react';
 import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -7,9 +7,20 @@ import DataSource, { API_ENDPOINT } from '../store/DataSource';
 
 const dataSource = new DataSource();
 
-export default function PetFormImageInput({ petName, images, setFieldValue }) {
-  const handleAdd = async ({ target: { files } }) => {
+function controlTooltip(text) {
+  return <Tooltip id={`tooltip-${text}`}>{text}</Tooltip>;
+}
+
+class PetFormImageInput extends Component {
+  constructor() {
+    super();
+    this.fileInputRef = React.createRef();
+  }
+
+  handleAdd = async ({ target: { files } }) => {
     try {
+      const { images, setFieldValue } = this.props;
+
       const form = new FormData();
 
       for (let i = 0; i < files.length; i += 1) {
@@ -24,10 +35,25 @@ export default function PetFormImageInput({ petName, images, setFieldValue }) {
       console.log(error);
       alert('PetFormImageInput image add error.');
     }
+    // Reset file input file state.
+    /* A silent error happens in this chronology:
+    1. Upload "image-one.jpg". (name doesn't matter)
+    2. Successful upload.
+    3. Delete "image-one.jpg".
+    4. Successful delete.
+    5. Upload "image-one.jpg", again.
+    6. The code does nothing.
+    Conclusion: The file input does not fire the "change" event because it has the
+    same "files" state as the previous file input change event. The problem doesn't
+    occur if I use a different set of images, resulting in a different set of "files"
+    state. */
+    this.fileInputRef.current.value = null;
   };
 
-  const handleDelete = async (filename) => {
+  handleDelete = async (filename) => {
     try {
+      const { images, setFieldValue } = this.props;
+
       const result = await dataSource.deleteData('/image', { filename });
 
       if (result.success) {
@@ -44,12 +70,10 @@ export default function PetFormImageInput({ petName, images, setFieldValue }) {
     }
   };
 
-  const controlTooltip = (text) => (
-    <Tooltip id={`tooltip-${text}`}>{text}</Tooltip>
-  );
+  createImages = () => {
+    const { images, petName } = this.props;
 
-  const createImages = () =>
-    images.map(({ path, filename }) => (
+    return images.map(({ path, filename }) => (
       <div key={filename} className="pet-form__image-wrapper">
         <img
           src={`${API_ENDPOINT}${path}`}
@@ -62,7 +86,7 @@ export default function PetFormImageInput({ petName, images, setFieldValue }) {
             <button
               type="button"
               className="pet-form__image-control-btn pet-form__image-control-btn--delete"
-              onClick={() => handleDelete(filename)}
+              onClick={() => this.handleDelete(filename)}
             >
               <FontAwesomeIcon icon="trash" />
             </button>
@@ -70,29 +94,40 @@ export default function PetFormImageInput({ petName, images, setFieldValue }) {
         </div>
       </div>
     ));
+  };
 
-  return (
-    <Form.Group controlId="images" className="pet-form__group pet-form__image">
-      <Form.Label className="pet-form__label">Images</Form.Label>
+  render() {
+    const { images } = this.props;
 
-      <div className="pet-form__image-list">
-        {images && images.length > 0 && createImages()}
+    return (
+      <Form.Group
+        controlId="images"
+        className="pet-form__group pet-form__image"
+      >
+        <Form.Label className="pet-form__label">Images</Form.Label>
 
-        <label htmlFor="image-add" className="pet-form__image-label">
-          <input
-            type="file"
-            id="image-add"
-            className="pet-form__image-add"
-            multiple
-            onChange={handleAdd}
-          />
-          <FontAwesomeIcon
-            icon="camera"
-            className="pet-form__image-label-icon"
-          />
-          <span className="pet-form__image-label-text">Add image</span>
-        </label>
-      </div>
-    </Form.Group>
-  );
+        <div className="pet-form__image-list">
+          {images && images.length > 0 && this.createImages()}
+
+          <label htmlFor="image-add" className="pet-form__image-label">
+            <input
+              type="file"
+              id="image-add"
+              className="pet-form__image-add"
+              multiple
+              ref={this.fileInputRef}
+              onChange={this.handleAdd}
+            />
+            <FontAwesomeIcon
+              icon="camera"
+              className="pet-form__image-label-icon"
+            />
+            <span className="pet-form__image-label-text">Add image</span>
+          </label>
+        </div>
+      </Form.Group>
+    );
+  }
 }
+
+export default PetFormImageInput;

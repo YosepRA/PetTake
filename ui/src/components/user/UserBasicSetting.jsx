@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Form, Button } from 'react-bootstrap';
 import { Formik, Field } from 'formik';
+import { connect } from 'react-redux';
 
-const demoUser = {
-  email: 'bigjoe@mail.com',
-  name: 'Big Joe',
-  phone: '+1 123 1234',
-  address: '3434 Bubby Drive Taylor, TX 76574',
+import actionCreator from '../store/actionCreator';
+
+const mapStateToProps = ({ user: { username, ...userData } }) => ({
+  userData,
+});
+const mapDispatchToProps = {
+  userInfoUpdate: actionCreator.userInfoUpdate,
 };
 
-export default class UserBasicSetting extends Component {
+class UserBasicSetting extends Component {
   constructor() {
     super();
     this.state = {
@@ -23,13 +26,17 @@ export default class UserBasicSetting extends Component {
   };
 
   handleSubmit = (values) => {
-    console.log('UserSetting values: ', JSON.stringify(values, null, 2));
+    const { userInfoUpdate } = this.props;
+
+    userInfoUpdate({ changes: values });
+
     this.setState({ basicInfoMode: 'view' });
   };
 
   render() {
+    const { userData } = this.props;
     const { basicInfoMode } = this.state;
-    const { email, name, phone, address } = demoUser;
+    const { email, name, phone, address } = userData;
 
     return (
       <div className="user-account__section user-account__basic">
@@ -70,7 +77,7 @@ export default class UserBasicSetting extends Component {
           </div>
         ) : (
           <div className="user-account__basic-edit">
-            <Formik initialValues={demoUser} onSubmit={this.handleSubmit}>
+            <Formik initialValues={userData} onSubmit={this.handleSubmit}>
               {({ handleSubmit }) => (
                 <Form
                   noValidate
@@ -85,7 +92,6 @@ export default class UserBasicSetting extends Component {
                           {...field}
                           type="text"
                           className="field__value field__input"
-                          disabled
                         />
                       )}
                     </Field>
@@ -163,3 +169,5 @@ export default class UserBasicSetting extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserBasicSetting);

@@ -20,6 +20,22 @@ const mutations = {
       petDelete(_id: $_id)
     }
   `,
+  [actionTypes.USER_INFO_UPDATE]: `
+    mutation userInfoUpdate($changes: UserInfoUpdateInput!) {
+      userInfoUpdate(changes: $changes) {
+        username
+        name
+        email
+        phone
+        address
+      }
+    }
+  `,
+  [actionTypes.USER_CHANGE_PASSWORD]: `
+    mutation userChangePassword($oldPassword: String!, $newPassword: String!) {
+      userChangePassword(oldPassword: $oldPassword, newPassword: $newPassword)
+    }
+  `,
 };
 
 export default mutations;

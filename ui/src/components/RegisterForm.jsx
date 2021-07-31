@@ -9,7 +9,11 @@ function RegisterForm({ handleSubmit, touched, errors, className }) {
         <Form.Label>Full Name</Form.Label>
         <Field name="name">
           {({ field }) => (
-            <Form.Control {...field} isInvalid={touched.name && errors.name} />
+            <Form.Control
+              {...field}
+              isInvalid={touched.name && errors.name}
+              autoFocus
+            />
           )}
         </Field>
 
