@@ -2,6 +2,8 @@
 
 Written using per-page basis.
 
+`commit 2f84f767ae76b314c445e102af5a746cc692b2e8`
+
 ---
 
 ## Data structure
@@ -10,6 +12,7 @@ Written using per-page basis.
 
 ```
 {
+  _id: ID,
   createdDate: String,
   name: String,
   breed: String,
@@ -19,7 +22,7 @@ Written using per-page basis.
   preferHomeWith: [String],
   preferHomeWithout: [String],
   health: [String],
-  images: [String],
+  images: [Image],
   description: String,
   author: User,
 }
@@ -29,6 +32,7 @@ Example:
 
 ```javascript
 {
+  _id: '123',
   createdDate: '2021-04-05T13:33:17.008Z',
   name: 'Nana',
   breed: 'Terrier',
@@ -38,7 +42,7 @@ Example:
   preferHomeWith: ['Other dogs', 'Children'],
   preferHomeWithout: ['Other cats'],
   health: ['Vaccinated', 'Spayed/neutered'],
-  images: ['/link/to/image1.png', '/link/to/image2.png']
+  images: ['Images'], // List of Images.
   description: 'Nana is a good kid. She behaves well with your children to give them good memories.'
   author: 'User' // User information object.
 }
@@ -72,7 +76,101 @@ Example:
 }
 ```
 
----
+### **Image**
+
+```
+{
+  _id: ID,
+  path: String,
+  filename: String
+}
+```
+
+Example:
+
+```javascript
+{
+  _id: 123,
+  path: '/link/to/image.png',
+  filename: 'image.png'
+}
+```
+
+## Input Types
+
+### **PetInput**
+
+```
+{
+  name: String,
+  breed: String,
+  age: String,
+  gender: String,
+  coatLength: String,
+  preferHomeWith: [String],
+  preferHomeWithout: [String],
+  health: [String],
+  images: [ImageInput],
+  description: String
+}
+```
+
+Example:
+
+```javascript
+{
+  name: 'Nana',
+  breed: 'Terrier',
+  age: 'Puppy',
+  gender: 'Female',
+  coatLength: 'Medium',
+  preferHomeWith: ['Other dogs', 'Children'],
+  preferHomeWithout: ['Other cats'],
+  health: ['Vaccinated', 'Spayed/neutered'],
+  images: ['ImageInput'], // List of ImageInputs.
+  description: 'Nana is a good kid. She behaves well with your children to give them good memories.'
+}
+```
+
+### **ImageInput**
+
+```
+{
+  path: String,
+  filename: String
+}
+```
+
+Example:
+
+```javascript
+{
+  path: '/link/to/image.png',
+  filename: 'image.png'
+}
+```
+
+### **UserInfoUpdateInput**
+
+```
+{
+  email: String
+  name: String
+  phone: String
+  address: String
+}
+```
+
+Example:
+
+```javascript
+{
+  email: 'joe@mail.com',
+  name: 'Joe Marcotti',
+  phone: '+1 2344 3993',
+  address: 'South Dakota'
+}
+```
 
 ## Queries
 
@@ -89,91 +187,8 @@ query petList(
   $preferHomeWith: [String]
   $preferHomeWithout: [String]
   $health: [String]
-) {
-  petList(
-    breed: $breed,
-    age: $age,
-    gender: $gender,
-    coatLength: $coatLength,
-    preferHomeWith: $preferHomeWith,
-    preferHomeWithout: $preferHomeWithout,
-    health: $health,
-  ) {
-    name
-    breed
-  }
-}
-```
-
-- Response:
-
-```javascript
-{
-  petList: [
-    { name: 'Nana', breed: 'Terrier' },
-    { name: 'Mike', breed: 'Poodle' },
-    { name: 'Dusky', breed: 'Shepherd' },
-  ];
-}
-```
-
-### Details
-
-- Query string:
-
-```
-query pet(
-  $id: ID!
-) {
-  pet(
-    id: $id
-  ) {
-    name
-    breed
-    age
-    gender
-    coatLength
-    preferHomeWith
-    preferHomeWithout
-    health
-    images
-    description
-  }
-}
-```
-
-- Response:
-
-```javascript
-{
-  pet: {
-    name: 'Nana',
-    breed: 'Terrier',
-    age: 'Puppy',
-    gender: 'Female',
-    coatLength: 'Medium',
-    preferHomeWith: ['Other dogs', 'Children'],
-    preferHomeWithout: ['Other cats'],
-    health: ['Vaccinated', 'Spayed/neutered'],
-    images: ['/link/to/image1.png', '/link/to/image2.png']
-    description: 'Nana is a good kid. She behaves well with your children to give them good memories.'
-  }
-}
-```
-
-### User pet list
-
-- Query string:
-
-```
-query petList(
-  $breed: String
-  $age: String
-  $gender: String
-  $coatLength: String
-  $preferHomeWith: [String]
-  $preferHomeWithout: [String]
-  $health: [String]
+  $sort: String
+  $page: Int
 ) {
   petList(
     breed: $breed
@@ -183,9 +198,20 @@ query petList(
     preferHomeWith: $preferHomeWith
     preferHomeWithout: $preferHomeWithout
     health: $health
+    sort: $sort
+    page: $page
   ) {
-    name
-    breed
+    page
+    pages
+    total
+    docs {
+      _id
+      name
+      breed
+      images {
+        path
+      }
+    }
   }
 }
 ```
@@ -194,35 +220,72 @@ query petList(
 
 ```javascript
 {
-  petList: [
-    { name: 'Nana', breed: 'Terrier' },
-    { name: 'Mike', breed: 'Poodle' },
-    { name: 'Dusky', breed: 'Shepherd' },
-  ];
+  petList: {
+    page: 2,
+    pages: 23,
+    total: 230,
+    docs: [
+      {
+        _id: 123,
+        name: 'Nana',
+        breed: 'Terrier',
+        images: [
+          { path: '/link/to/image01.png' },
+          { path: '/link/to/image02.png' },
+          { path: '/link/to/image03.png' },
+        ]
+      },
+      {
+        _id: 124,
+        name: 'Mike',
+        breed: 'Poodle',
+        images: [
+          { path: '/link/to/image01.png' },
+          { path: '/link/to/image02.png' },
+          { path: '/link/to/image03.png' },
+        ]
+      },
+      {
+        _id: 125,
+        name: 'Dusky',
+        breed: 'Shepherd',
+        images: [
+          { path: '/link/to/image01.png' },
+          { path: '/link/to/image02.png' },
+          { path: '/link/to/image03.png' },
+        ]
+      }
+      // ...
+    ]
+  }
 }
 ```
 
-### User pet edit
+### Details
 
 - Query string:
 
 ```
-query pet(
-  $id: ID!
-) {
-  pet(
-    id: $id
-  ) {
+query pet($_id: ID!) {
+  pet(_id: $_id) {
     name
     breed
-    age
     gender
+    age
     coatLength
     preferHomeWith
     preferHomeWithout
     health
-    images
     description
+    images {
+      path
+      filename
+    }
+    author {
+      email
+      phone
+      address
+    }
   }
 }
 ```
@@ -240,8 +303,104 @@ query pet(
     preferHomeWith: ['Other dogs', 'Children'],
     preferHomeWithout: ['Other cats'],
     health: ['Vaccinated', 'Spayed/neutered'],
-    images: ['/link/to/image1.png', '/link/to/image2.png']
-    description: 'Nana is a good kid. She behaves well with your children to give them good memories.'
+    images: [
+      { path: '/link/to/image01.png', filename: 'image01.png' },
+      { path: '/link/to/image02.png', filename: 'image02.png' },
+      { path: '/link/to/image03.png', filename: 'image03.png' }
+    ],
+    description: 'Nana is a good kid. She behaves well with your children to give them good memories.',
+    author: {
+      email: 'joe@mail.com',
+      phone: '+1 3232 4343',
+      address: 'South Dakota'
+    }
+  }
+}
+```
+
+### User pet list
+
+- Query string:
+
+```
+query userPetList(
+  $breed: String
+  $age: String
+  $gender: String
+  $coatLength: String
+  $preferHomeWith: [String]
+  $preferHomeWithout: [String]
+  $health: [String]
+  $sort: String
+  $page: Int
+) {
+  userPetList(
+    breed: $breed
+    age: $age
+    gender: $gender
+    coatLength: $coatLength
+    preferHomeWith: $preferHomeWith
+    preferHomeWithout: $preferHomeWithout
+    health: $health
+    sort: $sort
+    page: $page
+  ) {
+    page
+    pages
+    total
+    docs {
+      _id
+      name
+      breed
+      images {
+        path
+      }
+    }
+  }
+}
+```
+
+- Response:
+
+```javascript
+{
+  userPetList: {
+    page: 2,
+    pages: 23,
+    total: 230,
+    docs: [
+      {
+        _id: 123,
+        name: 'Nana',
+        breed: 'Terrier',
+        images: [
+          { path: '/link/to/image01.png' },
+          { path: '/link/to/image02.png' },
+          { path: '/link/to/image03.png' },
+        ]
+      },
+      {
+        _id: 124,
+        name: 'Mike',
+        breed: 'Poodle',
+        images: [
+          { path: '/link/to/image01.png' },
+          { path: '/link/to/image02.png' },
+          { path: '/link/to/image03.png' },
+        ]
+      },
+      {
+        _id: 125,
+        name: 'Dusky',
+        breed: 'Shepherd',
+        images: [
+          { path: '/link/to/image01.png' },
+          { path: '/link/to/image02.png' },
+          { path: '/link/to/image03.png' },
+        ]
+      }
+      // ...
+    ]
   }
 }
 ```
@@ -252,31 +411,12 @@ query pet(
 
 ### User pet new
 
-- New pet input type:
-
-```
-name: String!
-breed: String!
-age: String!
-gender: String!
-coatLength: String!
-preferHomeWith: [String]
-preferHomeWithout: [String]
-health: [String]
-images: [String]! // Direct upload to server on image addition.
-description: String! // Depends on how the text editor works.
-```
-
 - Mutation string:
 
 ```
-mutation petAdd(
-  $pet: PetInputs!
-) {
-  petAdd(
-    pet: $pet
-  ) {
-    id
+mutation petCreate($pet: PetInput!) {
+  petCreate(pet: $pet) {
+    _id
   }
 }
 ```
@@ -285,72 +425,20 @@ mutation petAdd(
 
 ```javascript
 {
-  petAdd: {
-    id: 'asd0asdsd8ssd8sad'; // MongoDB generated IDs.
+  petCreate: {
+    _id: 'asd0asdsd8ssd8sad'; // MongoDB generated IDs.
   }
 }
 ```
 
 ### User pet update
 
-- Update pet input type (Only the the changes):
-
-```
-name: String
-breed: String
-age: String
-gender: String
-coatLength: String
-preferHomeWith: [String]
-preferHomeWithout: [String]
-health: [String]
-images: [String] // Direct upload to server on image addition.
-description: String // Depends on how the text editor works.
-```
-
 - Mutation string:
 
 ```
-mutation petUpdate(
-  $changes: PetUpdateInputs!
-) {
-  petUpdate(
-    changes: $changes
-  )
-}
-```
-
-- Response:
-
-```javascript
-{
-  petUpdate: true; // Boolean based on successful change.
-}
-```
-
-### User registration
-
-- User input type
-
-```
-username: String!
-email: String!
-password: String!
-name: String!
-phone: String!
-address: String!
-```
-
-- Mutation string:
-
-```
-mutation userRegistration(
-  $user: User!
-) {
-  userRegistration(
-    user: $user
-  ) {
-    username
+mutation petUpdate($_id: ID!, $changes: PetUpdateInput!) {
+  petUpdate(_id: $_id, changes: $changes) {
+    _id
   }
 }
 ```
@@ -359,8 +447,38 @@ mutation userRegistration(
 
 ```javascript
 {
-  userRegistration: {
-    username: 'BigJoe"
+  petUpdate: {
+    _id: 'asd0asdsd8ssd8sad';
+  }
+}
+```
+
+### User info update
+
+- Mutation string:
+
+```
+mutation userInfoUpdate($changes: UserInfoUpdateInput!) {
+  userInfoUpdate(changes: $changes) {
+    username
+    name
+    email
+    phone
+    address
+  }
+}
+```
+
+- Response:
+
+```javascript
+{
+  userInfoUpdate {
+    username: 'joe',
+    name: 'Joe Marcotti',
+    email: 'joe@mail.com',
+    phone: '+1 2309 2994',
+    address: 'South Dakota'
   }
 }
 ```
@@ -370,14 +488,8 @@ mutation userRegistration(
 - Mutation string:
 
 ```
-mutation userChangePassword(
-  $oldPassword: String!
-  $newPassword: String!
-) {
-  userChangePassword(
-    oldPassword: $oldPassword
-    newPassword: $newPassword
-  )
+mutation userChangePassword($oldPassword: String!, $newPassword: String!) {
+  userChangePassword(oldPassword: $oldPassword, newPassword: $newPassword)
 }
 ```
 
@@ -385,7 +497,7 @@ mutation userChangePassword(
 
 ```javascript
 {
-  userChangePassword: true; // Throws error if old password is invalid.
+  userChangePassword true
 }
 ```
 
@@ -393,15 +505,19 @@ mutation userChangePassword(
 
 ## REST API
 
-### User sign in
+### User registration
 
 ```
-route: '/signin',
+route: '/user/register',
 method: 'POST',
 'content-type': 'application/json',
 body: {
-  username: 'BigJoe',
-  password: 'secretvalue',
+  user: {
+    name: 'Joe Marcotti',
+    username: 'joe',
+    email: 'joe@mail.com',
+    password: 'password'
+  }
 }
 ```
 
@@ -409,14 +525,49 @@ body: {
 
 ```javascript
 {
-  success: true;
+  success: true,
+  user: {
+    name: 'Joe Marcotti',
+    username: 'joe',
+    email: 'joe@mail.com',
+    // Phone and address is empty upon first registration.
+    phone: '',
+    address: ''
+  }
+}
+```
+
+### User sign in
+
+```
+route: '/user/signin',
+method: 'POST',
+'content-type': 'application/json',
+body: {
+  username: 'BigJoe',
+  password: 'password',
+}
+```
+
+- Response
+
+```javascript
+{
+  success: true,
+  user: {
+    name: 'Joe Marcotti',
+    username: 'joe',
+    email: 'joe@mail.com',
+    phone: '+1 2309 2994',
+    address: 'South Dakota'
+  }
 }
 ```
 
 ### User sign out
 
 ```
-route: '/signout',
+route: '/user/signout',
 method: 'POST',
 ```
 
