@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "apollo-server-express": "^2.22.2",
+    "connect-history-api-fallback": "^1.6.0",
     "connect-mongo": "^4.4.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

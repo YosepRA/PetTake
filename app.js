@@ -7,6 +7,7 @@ const cors = require('cors');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const logger = require('morgan');
+const history = require('connect-history-api-fallback');
 
 const mongoConnect = require('./mongoConnect');
 const startApolloServer = require('./graphql/apiHandler');
@@ -65,6 +66,7 @@ app.use(
   }),
 );
 app.use(logger('dev'));
+app.use(history());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, './ui/build')));
