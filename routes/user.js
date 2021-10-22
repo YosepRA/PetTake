@@ -33,7 +33,7 @@ router.get('/', (req, res) => {
 
 // User register.
 router.post('/register', async (req, res) => {
-  // if (isDemo) return res.sendStatus(400);
+  if (isDemo) return res.sendStatus(400);
 
   try {
     const {
