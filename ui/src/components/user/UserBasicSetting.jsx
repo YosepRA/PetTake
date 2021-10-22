@@ -6,6 +6,10 @@ import { connect } from 'react-redux';
 
 import actionCreator from '../store/actionCreator';
 
+const { REACT_APP_IS_DEMO } = process.env;
+const isDemo = REACT_APP_IS_DEMO === 'true';
+
+// We need everything but username because it shouldn't be changed.
 const mapStateToProps = ({ user: { username, ...userData } }) => ({
   userData,
 });
@@ -26,11 +30,15 @@ class UserBasicSetting extends Component {
   };
 
   handleSubmit = (values) => {
+    if (isDemo) return undefined;
+
     const { userInfoUpdate } = this.props;
 
     userInfoUpdate({ changes: values });
 
     this.setState({ basicInfoMode: 'view' });
+
+    return undefined;
   };
 
   render() {
@@ -147,6 +155,7 @@ class UserBasicSetting extends Component {
                         type="submit"
                         variant="primary"
                         className="user-account__form-btn user-account__form-btn--primary user-account__basic-form-btn"
+                        disabled={isDemo}
                       >
                         Submit
                       </Button>

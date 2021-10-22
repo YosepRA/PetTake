@@ -29,6 +29,7 @@ import './css/main.min.css';
 
 import ScrollToTop from './components/ScrollToTop';
 import MainNavbar from './components/MainNavbar';
+import DemoAlert from './components/DemoAlert';
 import Home from './components/Home';
 import PetDetails from './components/PetDetails';
 import Contact from './components/Contact';
@@ -38,6 +39,9 @@ import Login from './components/Login';
 import Register from './components/Register';
 import actionCreator from './components/store/actionCreator';
 import DataSource from './components/store/DataSource';
+
+const { REACT_APP_IS_DEMO } = process.env;
+const isDemo = REACT_APP_IS_DEMO === 'true';
 
 const dataSource = new DataSource();
 
@@ -81,12 +85,15 @@ class App extends Component {
 
           <MainNavbar />
 
+          {isDemo && <DemoAlert />}
+
           <Switch>
             <Route path="/home/:page" component={Home} />
             <Route path="/pet/:id" component={PetDetails} />
             <Route path="/contact" component={Contact} />
-            <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
+
+            {!isDemo && <Route path="/register" component={Register} />}
 
             <Route path="/user" component={UserSwitch} />
 

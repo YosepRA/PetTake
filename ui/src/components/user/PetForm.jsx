@@ -12,6 +12,9 @@ import queries from '../store/graphQLQueries';
 import mutations from '../store/graphQLMutations';
 import PetFormImageInput from './PetFormImageInput';
 
+const { REACT_APP_IS_DEMO } = process.env;
+const isDemo = REACT_APP_IS_DEMO === 'true';
+
 const dataSource = new DataSource();
 
 // ===== Input options. =====
@@ -204,6 +207,8 @@ export default class PetForm extends Component {
   }
 
   handleSubmit = async (values) => {
+    if (isDemo) return undefined;
+
     try {
       const {
         history,
@@ -234,7 +239,7 @@ export default class PetForm extends Component {
       console.error('PetForm handle submit error.', error.message);
     }
 
-    // console.log('PetForm values: ', JSON.stringify(values, null, 2));
+    return undefined;
   };
 
   handleCancel = () => {
@@ -412,6 +417,7 @@ export default class PetForm extends Component {
                     variant="primary"
                     type="submit"
                     className="pet-form__control-btn pet-form__control-btn--create"
+                    disabled={isDemo}
                   >
                     {mode === 'new' ? 'Create' : 'Edit'}
                   </Button>

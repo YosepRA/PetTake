@@ -3,7 +3,14 @@
   "parserOptions": {
     "requireConfigFile": false
   },
-  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "env": {
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "airbnb-base",
+    "plugin:prettier/recommended"
+  ],
   "plugins": ["prettier"],
   "rules": {
     "indent": ["error", 2],

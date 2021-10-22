@@ -1,9 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
-import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Form, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import DataSource, { API_ENDPOINT } from '../store/DataSource';
+
+const { REACT_APP_IS_DEMO } = process.env;
+const isDemo = REACT_APP_IS_DEMO === 'true';
 
 const dataSource = new DataSource();
 
@@ -81,17 +84,19 @@ class PetFormImageInput extends Component {
           className="pet-form__image-item"
         />
 
-        <div className="pet-form__image-control">
-          <OverlayTrigger placement="left" overlay={controlTooltip('Delete')}>
-            <button
-              type="button"
-              className="pet-form__image-control-btn pet-form__image-control-btn--delete"
-              onClick={() => this.handleDelete(filename)}
-            >
-              <FontAwesomeIcon icon="trash" />
-            </button>
-          </OverlayTrigger>
-        </div>
+        {!isDemo && (
+          <div className="pet-form__image-control">
+            <OverlayTrigger placement="left" overlay={controlTooltip('Delete')}>
+              <button
+                type="button"
+                className="pet-form__image-control-btn pet-form__image-control-btn--delete"
+                onClick={() => this.handleDelete(filename)}
+              >
+                <FontAwesomeIcon icon="trash" />
+              </button>
+            </OverlayTrigger>
+          </div>
+        )}
       </div>
     ));
   };
@@ -109,21 +114,38 @@ class PetFormImageInput extends Component {
         <div className="pet-form__image-list">
           {images && images.length > 0 && this.createImages()}
 
-          <label htmlFor="image-add" className="pet-form__image-label">
-            <input
-              type="file"
-              id="image-add"
-              className="pet-form__image-add"
-              multiple
-              ref={this.fileInputRef}
-              onChange={this.handleAdd}
-            />
-            <FontAwesomeIcon
-              icon="camera"
-              className="pet-form__image-label-icon"
-            />
-            <span className="pet-form__image-label-text">Add image</span>
-          </label>
+          {isDemo ? (
+            <Button className="pet-form__upload-btn disabled">
+              <FontAwesomeIcon
+                icon="camera"
+                className="pet-form__upload-btn-icon"
+              />
+              <span className="pet-form__upload-btn-text">
+                Upload image is disabled on demo
+              </span>
+            </Button>
+          ) : (
+            <label
+              htmlFor="image-add"
+              className="pet-form__image-label pet-form__upload-btn"
+            >
+              <input
+                type="file"
+                id="image-add"
+                className="pet-form__image-add"
+                multiple
+                ref={this.fileInputRef}
+                onChange={this.handleAdd}
+              />
+              <FontAwesomeIcon
+                icon="camera"
+                className="pet-form__image-label-icon pet-form__upload-btn-icon"
+              />
+              <span className="pet-form__image-label-text pet-form__upload-btn-text">
+                Add image
+              </span>
+            </label>
+          )}
         </div>
       </Form.Group>
     );

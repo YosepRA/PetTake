@@ -255,6 +255,10 @@ body {
   }
 }
 
+.demo-alert {
+  margin-bottom: 0;
+}
+
 // ===== BREAKPOINTS =====
 
 @include breakpoint-up(sm) {

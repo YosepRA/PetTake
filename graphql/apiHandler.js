@@ -5,6 +5,8 @@ const GraphQLDate = require('./graphql_date');
 const { list, details, userPetList, create, update, remove } = require('./pet');
 const userResolver = require('./user');
 
+const { NODE_ENV, CORS_ORIGIN, CORS_CREDENTIALS } = process.env;
+
 function resolveContext({ req }) {
   return req.isAuthenticated()
     ? {
@@ -13,13 +15,13 @@ function resolveContext({ req }) {
     : {};
 }
 
-const corsConfig = {
-  origin:
-    process.env.CORS_ORIGIN === 'true' ||
-    process.env.CORS_ORIGIN ||
-    'http://localhost:8000',
-  credentials: process.env.CORS_CREDENTIALS === 'true',
-};
+const corsConfig =
+  NODE_ENV === 'development'
+    ? {
+        origin: [CORS_ORIGIN, /\.ngrok\.io/],
+        credentials: CORS_CREDENTIALS === 'true',
+      }
+    : { origin: false };
 
 const resolvers = {
   Query: {

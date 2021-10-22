@@ -10,6 +10,9 @@ import FormErrorMessage from './FormErrorMessage';
 import withLogin from './withLogin';
 import LoginSchema from './helpers/yup/LoginSchema';
 
+const { REACT_APP_IS_DEMO } = process.env;
+const isDemo = REACT_APP_IS_DEMO === 'true';
+
 const initialValues = {
   username: '',
   password: '',
@@ -55,12 +58,14 @@ class Login extends Component {
                   )}
                 </Formik>
 
-                <div className="panel__footer">
-                  <p>
-                    Don&apos;t have an account?{' '}
-                    <Link to="/register">Register.</Link>
-                  </p>
-                </div>
+                {!isDemo && (
+                  <div className="panel__footer">
+                    <p>
+                      Don&apos;t have an account?{' '}
+                      <Link to="/register">Register.</Link>
+                    </p>
+                  </div>
+                )}
               </div>
             </Col>
           </Row>

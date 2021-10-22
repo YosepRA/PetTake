@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { API_ENDPOINT } from './store/DataSource';
 
+const { REACT_APP_IS_DEMO } = process.env;
+const isDemo = REACT_APP_IS_DEMO === 'true';
+
 export default function PetCard({
   pet: { _id, name, breed, images },
   baseUrl,
@@ -48,16 +51,18 @@ export default function PetCard({
             </Link>
           </OverlayTrigger>
 
-          <OverlayTrigger placement="left" overlay={controlTooltip('Delete')}>
-            <button
-              type="button"
-              variant="primary"
-              className="pet__control-btn pet__control-btn--delete"
-              onClick={() => handleDelete(_id)}
-            >
-              <FontAwesomeIcon icon="trash" />
-            </button>
-          </OverlayTrigger>
+          {!isDemo && (
+            <OverlayTrigger placement="left" overlay={controlTooltip('Delete')}>
+              <button
+                type="button"
+                variant="primary"
+                className="pet__control-btn pet__control-btn--delete"
+                onClick={() => handleDelete(_id)}
+              >
+                <FontAwesomeIcon icon="trash" />
+              </button>
+            </OverlayTrigger>
+          )}
         </div>
       )}
     </Card>

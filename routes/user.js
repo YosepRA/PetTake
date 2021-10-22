@@ -3,6 +3,9 @@ const express = require('express');
 const User = require('../models/User');
 const { authenticateLogin, isLoggedIn } = require('../middlewares');
 
+const { IS_DEMO } = process.env;
+const isDemo = IS_DEMO === 'true';
+
 const router = express.Router();
 
 /* ========== Routes ========== */
@@ -22,7 +25,7 @@ router.get('/', (req, res) => {
     address,
   };
 
-  return res.json({
+  res.json({
     success: true,
     user: userData,
   });
@@ -30,6 +33,8 @@ router.get('/', (req, res) => {
 
 // User register.
 router.post('/register', async (req, res) => {
+  if (isDemo) return res.sendStatus(400);
+
   try {
     const {
       user: { password, ...userRest },
@@ -62,6 +67,8 @@ router.post('/register', async (req, res) => {
       message: err.message,
     });
   }
+
+  return undefined;
 });
 
 // User login.

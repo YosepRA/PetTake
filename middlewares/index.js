@@ -19,13 +19,15 @@ module.exports = {
         return res.json({
           success: false,
           message,
-        })
+        });
       }
 
       req.login(user, (loginError) => {
         if (loginError) return res.sendStatus(500);
         return next();
       });
+
+      return undefined;
     })(req, res, next);
   },
 };

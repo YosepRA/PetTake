@@ -6,6 +6,9 @@ import LoginModalBody from './LoginModalBody';
 import RegisterModalBody from './RegisterModalBody';
 import withModal from './withModal';
 
+const { REACT_APP_IS_DEMO } = process.env;
+const isDemo = REACT_APP_IS_DEMO === 'true';
+
 class UserModal extends Component {
   constructor() {
     super();
@@ -42,13 +45,16 @@ class UserModal extends Component {
           Login
         </button>
 
-        <button
-          type="button"
-          className="navbar__menu-item navbar__menu-button"
-          onClick={() => this.handleModalShow('register')}
-        >
-          Register
-        </button>
+        {/* Disable register for demo build. */}
+        {!isDemo && (
+          <button
+            type="button"
+            className="navbar__menu-item navbar__menu-button"
+            onClick={() => this.handleModalShow('register')}
+          >
+            Register
+          </button>
+        )}
 
         <Modal
           show={isOpen}

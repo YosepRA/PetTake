@@ -1,9 +1,13 @@
 import axios from 'axios';
 
-// Axios global defaults.
-axios.defaults.withCredentials = true;
+const { NODE_ENV, REACT_APP_API_ENDPOINT } = process.env;
 
-const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || '';
+// Axios global defaults.
+if (NODE_ENV === 'development') {
+  axios.defaults.withCredentials = true;
+}
+
+const API_ENDPOINT = REACT_APP_API_ENDPOINT || '';
 const GRAPHQL_ENDPOINT = `${API_ENDPOINT}/graphql`;
 
 class DataSource {

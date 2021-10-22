@@ -66,6 +66,11 @@ $light-grey: #cccccc;
   &:not(:disabled):not(.disabled):active {
     background-color: darken($secondary-color, 10);
   }
+
+  &:disabled {
+    background-color: $light-grey;
+    color: $main-black;
+  }
 }
 
 @mixin light-button {

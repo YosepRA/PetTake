@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
-function mongoConnect() {
-  mongoose.connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
+function mongoConnect(mongoUrl) {
+  mongoose.connect(mongoUrl, {
     useUnifiedTopology: true,
+    useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
   });
+
   const dbConnection = mongoose.connection;
   dbConnection.on('error', () => console.error('Database connection error.'));
   dbConnection.on('open', () => {

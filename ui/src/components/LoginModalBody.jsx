@@ -8,6 +8,9 @@ import FormErrorMessage from './FormErrorMessage';
 import withLogin from './withLogin';
 import LoginSchema from './helpers/yup/LoginSchema';
 
+const { REACT_APP_IS_DEMO } = process.env;
+const isDemo = REACT_APP_IS_DEMO === 'true';
+
 const initialValues = {
   username: '',
   password: '',
@@ -47,14 +50,17 @@ function LoginModalBody(props) {
         </Formik>
       </Modal.Body>
 
-      <Modal.Footer className="navbar__modal-footer">
-        <p>
-          Don&apos;t have an account?{' '}
-          <a href="#" className="text-primary" onClick={handleChangePage}>
-            Register.
-          </a>
-        </p>
-      </Modal.Footer>
+      {/* Disabled register for demo build. */}
+      {!isDemo && (
+        <Modal.Footer className="navbar__modal-footer">
+          <p>
+            Don&apos;t have an account?{' '}
+            <a href="#" className="text-primary" onClick={handleChangePage}>
+              Register.
+            </a>
+          </p>
+        </Modal.Footer>
+      )}
     </>
   );
 }

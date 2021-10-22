@@ -8,6 +8,9 @@ import mutations from '../store/graphQLMutations';
 import ChangePasswordSchema from '../helpers/yup/ChangePasswordSchema';
 import FormErrorMessage from '../FormErrorMessage';
 
+const { REACT_APP_IS_DEMO } = process.env;
+const isDemo = REACT_APP_IS_DEMO === 'true';
+
 const dataSource = new DataSource();
 
 const initialValue = {
@@ -31,6 +34,8 @@ class UserPasswordSetting extends Component {
     { oldPasswordRepeat, ...variables },
     { resetForm },
   ) => {
+    if (isDemo) return undefined;
+
     try {
       const result = await dataSource.graphQLFetch(
         mutations[actionTypes.USER_CHANGE_PASSWORD],
@@ -45,6 +50,8 @@ class UserPasswordSetting extends Component {
     } catch (error) {
       this.setState({ error: { show: true, message: error.message } });
     }
+
+    return undefined;
   };
 
   render() {
@@ -148,6 +155,7 @@ class UserPasswordSetting extends Component {
                     type="submit"
                     variant="primary"
                     className="user-account__form-btn user-account__form-btn--primary user-account__password-form-btn"
+                    disabled={isDemo}
                   >
                     Submit
                   </Button>
