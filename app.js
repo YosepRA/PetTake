@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-const path = require('path');
-
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
@@ -9,13 +7,16 @@ const MongoStore = require('connect-mongo');
 const logger = require('morgan');
 const history = require('connect-history-api-fallback');
 
-const mongoConnect = require('./mongoConnect');
-const startApolloServer = require('./graphql/apiHandler');
-const passport = require('./passport');
+const path = require('path');
 
-const indexRouter = require('./routes');
-const imageRouter = require('./routes/image');
-const userRouter = require('./routes/user');
+const mongoConnect = require('./mongo-connect.js');
+const startApolloServer = require('./graphql/apiHandler.js');
+const passport = require('./passport/index.js');
+const cloudinaryInit = require('./services/cloudinary/index.js');
+
+const indexRouter = require('./routes/index.js');
+const imageRouter = require('./routes/image.js');
+const userRouter = require('./routes/user.js');
 
 const app = express();
 
@@ -47,12 +48,12 @@ const corsConfig =
     : { origin: false };
 
 const mongoUrl = MONGODB_URL;
+
 mongoConnect(mongoUrl);
 
 /* ========== Middlewares ========== */
 
 app.use(express.json());
-// Set CORS credentials accordingly on production build.
 app.use(cors(corsConfig));
 app.use(
   session({
@@ -67,14 +68,20 @@ app.use(
 );
 app.use(logger('dev'));
 app.use(history());
-
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, './ui/build')));
+
+if (NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, './ui/build')));
+}
 
 /* ========== Passport initialization ========== */
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+/* ========== Cloudinary initialization ========== */
+
+cloudinaryInit();
 
 /* ========== Routes ========== */
 

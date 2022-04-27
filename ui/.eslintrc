@@ -2,7 +2,7 @@
   "env": {
     "browser": true
   },
-  "extends": ["react-app", "react-app/jest", "airbnb"],
+  "extends": ["airbnb"],
   "rules": {
     "arrow-parens": ["error", "always"],
     "implicit-arrow-linebreak": "off",

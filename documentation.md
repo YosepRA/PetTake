@@ -1,14 +1,43 @@
-# PetTake API Specification
+# Documentation
 
-Written using per-page basis.
+## PetTake Technical Design
 
-`commit 2f84f767ae76b314c445e102af5a746cc692b2e8`
+Main technologies that are used in the application.
+
+### Server
+
+- Node
+- Express
+
+### Database
+
+- MongoDB
+- Mongoose
+
+### API
+
+- GraphQL
+- Apollo server + client.
+
+### Authentication
+
+- Passport  
+  Username-password.
+
+### Front-end
+
+- React  
+  create-react-app
+- SASS  
+  Manual compile using VScode extension.
 
 ---
 
-## Data structure
+## PetTake API Specification
 
-### **Pet**
+### **Data Structures**
+
+### Pet
 
 ```
 {
@@ -48,7 +77,7 @@ Example:
 }
 ```
 
-### **User**
+### User
 
 ```
 {
@@ -76,7 +105,7 @@ Example:
 }
 ```
 
-### **Image**
+### Image
 
 ```
 {
@@ -96,9 +125,9 @@ Example:
 }
 ```
 
-## Input Types
+### **Input Types**
 
-### **PetInput**
+### Pet
 
 ```
 {
@@ -132,7 +161,7 @@ Example:
 }
 ```
 
-### **ImageInput**
+### Image
 
 ```
 {
@@ -150,7 +179,7 @@ Example:
 }
 ```
 
-### **UserInfoUpdateInput**
+### UserInfoUpdate
 
 ```
 {
@@ -172,7 +201,7 @@ Example:
 }
 ```
 
-## Queries
+### **Queries**
 
 ### Home
 
@@ -407,7 +436,7 @@ query userPetList(
 
 ---
 
-## Mutation
+### **Mutation**
 
 ### User pet new
 
