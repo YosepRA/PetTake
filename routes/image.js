@@ -33,7 +33,7 @@ const upload = multer({ storage, fileFilter: imageFilter });
 /* ========== Routes ========== */
 
 // Upload image.
-router.post('/', controller.upload);
+router.post('/', upload.array('images'), controller.upload);
 
 // Delete image.
 // router.delete('/', async (req, res) => {

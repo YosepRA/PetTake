@@ -10,7 +10,7 @@ const history = require('connect-history-api-fallback');
 const path = require('path');
 
 const mongoConnect = require('./mongo-connect.js');
-const startApolloServer = require('./graphql/apiHandler.js');
+const startApolloServer = require('./graphql/api-handler.js');
 const passport = require('./passport/index.js');
 const cloudinaryInit = require('./services/cloudinary/index.js');
 
@@ -31,14 +31,6 @@ const {
 
 const port = PORT || 3000;
 
-let sessionSecret = SESSION_SECRET;
-if (!sessionSecret) {
-  console.log(
-    'You are using unsafe session secret. Provide application with safe secret using environment variable.',
-  );
-  sessionSecret = 'unsafe_secret';
-}
-
 const corsConfig =
   NODE_ENV === 'development'
     ? {
@@ -46,6 +38,25 @@ const corsConfig =
         credentials: CORS_CREDENTIALS === 'true',
       }
     : { origin: false };
+
+let sessionSecret = SESSION_SECRET;
+
+if (!sessionSecret) {
+  console.log(
+    'You are using unsafe session secret. Provide application with safe secret using environment variable.',
+  );
+  sessionSecret = 'unsafe_secret';
+}
+
+const sessionConfig = {
+  secret: sessionSecret,
+  saveUninitialized: false,
+  resave: false,
+  store: MongoStore.create({
+    mongoUrl: MONGODB_URL,
+    ttl: 7 * 24 * 60 * 60,
+  }),
+};
 
 const mongoUrl = MONGODB_URL;
 
@@ -55,24 +66,15 @@ mongoConnect(mongoUrl);
 
 app.use(express.json());
 app.use(cors(corsConfig));
-app.use(
-  session({
-    secret: sessionSecret,
-    saveUninitialized: false,
-    resave: false,
-    store: MongoStore.create({
-      mongoUrl: MONGODB_URL,
-      ttl: 7 * 24 * 60 * 60,
-    }),
-  }),
-);
+app.use(session(sessionConfig));
 app.use(logger('dev'));
-app.use(history());
-app.use(express.static(path.join(__dirname, 'public')));
 
 if (NODE_ENV === 'production') {
+  app.use(history());
   app.use(express.static(path.join(__dirname, './ui/build')));
 }
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 /* ========== Passport initialization ========== */
 

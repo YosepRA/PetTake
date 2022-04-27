@@ -17,7 +17,8 @@ Main technologies that are used in the application.
 ### API
 
 - GraphQL
-- Apollo server + client.
+- Apollo server
+- REST
 
 ### Authentication
 

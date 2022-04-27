@@ -1,4 +1,4 @@
-# PetTake
+# PetTake API
 
 Pet finder app built using MERN stack and GraphQL.
 

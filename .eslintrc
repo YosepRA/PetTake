@@ -19,6 +19,7 @@
     "semi": ["error", "always"],
     "no-console": ["warn"],
     "import/extensions": ["error", "always", { "ignorePackages": true }],
+    "implicit-arrow-linebreak": ["error", "below"],
     "prettier/prettier": [
       "error",
       {
