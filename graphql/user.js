@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/user.js');
 
 async function update(_, { changes }, { username }) {
   const updatedUser = await User.findOneAndUpdate({ username }, changes, {

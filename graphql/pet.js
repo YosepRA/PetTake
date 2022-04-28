@@ -2,8 +2,8 @@
 
 const fsPromises = require('fs').promises;
 
-const Pet = require('../models/Pet');
-const User = require('../models/User');
+const Pet = require('../models/pet.js');
+const User = require('../models/user.js');
 
 // ===== Helpers =====
 

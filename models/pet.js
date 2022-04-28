@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const paginatePlugin = require('./plugins/paginate');
+const paginatePlugin = require('./plugins/paginate.js');
 
 const { Schema } = mongoose;
 
@@ -16,8 +16,8 @@ const petSchema = new Schema({
   health: [String],
   images: [
     {
-      path: String,
-      filename: String,
+      publicId: String,
+      url: String,
     },
   ],
   description: String,
@@ -26,4 +26,4 @@ const petSchema = new Schema({
 
 petSchema.plugin(paginatePlugin);
 
-module.exports = mongoose.model('Pet', petSchema);
+module.exports = mongoose.models.Pet || mongoose.model('Pet', petSchema);

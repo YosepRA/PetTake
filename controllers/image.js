@@ -1,3 +1,5 @@
+/* eslint implicit-arrow-linebreak: ["error", "below"] */
+
 const cloudinary = require('cloudinary').v2;
 
 const { promiseResolver } = require('../utilities/helpers.js');
@@ -25,7 +27,17 @@ module.exports = {
 
     return res.json({ succesS: true, data: uploadData });
   },
-  delete(req, res) {
-    res.send('Hello from image delete route.');
+  async delete(req, res) {
+    const { publicId } = req.body;
+
+    const [deleteResult, error] = await promiseResolver(
+      cloudinary.uploader.destroy(publicId),
+    );
+
+    if (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+
+    return res.json({ success: true });
   },
 };

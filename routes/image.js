@@ -32,24 +32,7 @@ const upload = multer({ storage, fileFilter: imageFilter });
 
 /* ========== Routes ========== */
 
-// Upload image.
 router.post('/', upload.array('images'), controller.upload);
-
-// Delete image.
-// router.delete('/', async (req, res) => {
-//   try {
-//     const { filename } = req.body;
-
-//     await fsPromises.unlink(`./public/uploads/${filename}`);
-
-//     res.json({ success: true });
-//   } catch (error) {
-//     res.json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// });
 
 router.delete('/', controller.delete);
 

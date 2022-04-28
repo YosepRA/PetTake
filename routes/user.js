@@ -1,6 +1,6 @@
 const express = require('express');
 
-const User = require('../models/User');
+const User = require('../models/user.js');
 const { authenticateLogin, isLoggedIn } = require('../middlewares');
 
 const { IS_DEMO } = process.env;

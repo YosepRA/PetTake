@@ -30,8 +30,8 @@ type User {
 
 type Image {
   _id: ID!
-  path: String!
-  filename: String!
+  publicId: String!
+  url: String!
 }
 
 type PetListWithPage {
@@ -70,8 +70,8 @@ input PetUpdateInput {
 }
 
 input ImageInput {
-  path: String!
-  filename: String!
+  publicId: String!
+  url: String!
 }
 
 input UserInfoUpdateInput {
