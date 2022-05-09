@@ -18,6 +18,9 @@ jobs:
           cd ui/
           npm ci
           npm run build
+        env:
+          REACT_APP_IS_DEMO: ${{ secrets.REACT_APP_IS_DEMO }}
+          REACT_APP_API_ENDPOINT: ${{ secrets.REACT_APP_API_ENDPOINT }}
 
       - name: Deploy to GitHub Pages 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
@@ -36,6 +39,6 @@ jobs:
       - name: Deploy to Heroku
         uses: AkhileshNS/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: 'pettake'
           heroku_email: 'yosep.ryan.yra@gmail.com'
