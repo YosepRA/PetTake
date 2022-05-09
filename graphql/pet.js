@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-const fsPromises = require('fs').promises;
+const cloudinary = require('cloudinary').v2;
 
 const Pet = require('../models/pet.js');
 const User = require('../models/user.js');
@@ -102,9 +102,11 @@ async function remove(_, { _id }, { username }) {
   const result = await Pet.findByIdAndDelete(_id);
 
   // Delete uploaded images.
-  result.images.forEach(async ({ filename }) => {
-    await fsPromises.unlink(`./public/uploads/${filename}`);
-  });
+  const imageDeletePromises = result.images.map(({ publicId }) =>
+    cloudinary.uploader.destroy(publicId),
+  );
+
+  await Promise.all(imageDeletePromises);
 
   // Delete frpm user's pet list.
   user.pets = user.pets.filter((petId) => petId.toString() !== _id);

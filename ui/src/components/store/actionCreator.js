@@ -1,7 +1,7 @@
 import actionTypes from './actionTypes';
 import DataSource from './DataSource';
-import queries from './graphQLQueries';
-import mutations from './graphQLMutations';
+import queries from './graphqlQueries';
+import mutations from './graphqlMutations';
 
 const dataSource = new DataSource();
 

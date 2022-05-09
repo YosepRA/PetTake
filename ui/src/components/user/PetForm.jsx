@@ -8,8 +8,8 @@ import '../../css/pet-form.min.css';
 
 import DataSource from '../store/DataSource';
 import actionTypes from '../store/actionTypes';
-import queries from '../store/graphQLQueries';
-import mutations from '../store/graphQLMutations';
+import queries from '../store/graphqlQueries';
+import mutations from '../store/graphqlMutations';
 import PetFormImageInput from './PetFormImageInput';
 
 const { REACT_APP_IS_DEMO } = process.env;

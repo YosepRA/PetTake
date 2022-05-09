@@ -12,7 +12,7 @@
     "url": "git+https://github.com/YosepRA/PetTake.git"
   },
   "author": "Yosep Ryan Agusta",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/YosepRA/PetTake/issues"
   },
@@ -31,7 +31,6 @@
   "dependencies": {
     "apollo-server-express": "^2.22.2",
     "cloudinary": "^1.29.1",
-    "connect-history-api-fallback": "^1.6.0",
     "connect-mongo": "^4.4.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

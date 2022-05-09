@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Form, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import DataSource, { API_ENDPOINT } from '../store/DataSource';
+import DataSource from '../store/DataSource';
 
 const { REACT_APP_IS_DEMO } = process.env;
 const isDemo = REACT_APP_IS_DEMO === 'true';
@@ -33,11 +33,12 @@ class PetFormImageInput extends Component {
 
       const result = await dataSource.postData('/image', form);
 
-      setFieldValue('images', images.concat(result));
+      setFieldValue('images', images.concat(result.data));
     } catch (error) {
       console.log(error);
       alert('PetFormImageInput image add error.');
     }
+
     // Reset file input file state.
     /* A silent error happens in this chronology:
     1. Upload "image-one.jpg". (name doesn't matter)
@@ -53,16 +54,16 @@ class PetFormImageInput extends Component {
     this.fileInputRef.current.value = null;
   };
 
-  handleDelete = async (filename) => {
+  handleDelete = async (publicId) => {
     try {
       const { images, setFieldValue } = this.props;
 
-      const result = await dataSource.deleteData('/image', { filename });
+      const result = await dataSource.deleteData('/image', { publicId });
 
       if (result.success) {
         // Filter out the recently deleted image from pet form state.
         const filteredImages = images.filter(
-          (img) => img.filename !== filename,
+          (img) => img.publicId !== publicId,
         );
 
         setFieldValue('images', filteredImages);
@@ -76,13 +77,9 @@ class PetFormImageInput extends Component {
   createImages = () => {
     const { images, petName } = this.props;
 
-    return images.map(({ path, filename }) => (
-      <div key={filename} className="pet-form__image-wrapper">
-        <img
-          src={`${API_ENDPOINT}${path}`}
-          alt={petName}
-          className="pet-form__image-item"
-        />
+    return images.map(({ publicId, url }) => (
+      <div key={publicId} className="pet-form__image-wrapper">
+        <img src={url} alt={petName} className="pet-form__image-item" />
 
         {!isDemo && (
           <div className="pet-form__image-control">
@@ -90,7 +87,7 @@ class PetFormImageInput extends Component {
               <button
                 type="button"
                 className="pet-form__image-control-btn pet-form__image-control-btn--delete"
-                onClick={() => this.handleDelete(filename)}
+                onClick={() => this.handleDelete(publicId)}
               >
                 <FontAwesomeIcon icon="trash" />
               </button>

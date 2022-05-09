@@ -5,7 +5,6 @@ import { Container, Row, Col, Carousel } from 'react-bootstrap';
 import '../css/pet-details.min.css';
 
 import actionCreator from './store/actionCreator';
-import { API_ENDPOINT } from './store/DataSource';
 
 const mapStateToProps = ({ petDetails }) => ({
   petDetails,
@@ -16,9 +15,9 @@ const mapDispatchToProps = {
 
 function createCarouselItems(data, petName) {
   return data.map((image, index) => (
-    <Carousel.Item key={image.filename} className="pet-carousel__item">
+    <Carousel.Item key={image.publicId} className="pet-carousel__item">
       <img
-        src={`${API_ENDPOINT}${image.path}`}
+        src={image.url}
         alt={`${petName}-${index + 1}`}
         className="pet-carousel__image"
       />

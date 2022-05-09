@@ -52,7 +52,10 @@ Main technologies that are used in the application.
   preferHomeWith: [String],
   preferHomeWithout: [String],
   health: [String],
-  images: [Image],
+  images: [{
+    publicId: String,
+    url: String,
+  }],
   description: String,
   author: User,
 }
@@ -72,7 +75,10 @@ Example:
   preferHomeWith: ['Other dogs', 'Children'],
   preferHomeWithout: ['Other cats'],
   health: ['Vaccinated', 'Spayed/neutered'],
-  images: ['Images'], // List of Images.
+  images: [{
+    publicId: 'some-public-id',
+    url: 'https://link.to.image',
+  }],
   description: 'Nana is a good kid. She behaves well with your children to give them good memories.'
   author: 'User' // User information object.
 }
@@ -82,6 +88,7 @@ Example:
 
 ```
 {
+  _id: ID,
   username: String,
   email: String,
   password: String,
@@ -96,6 +103,7 @@ Example:
 
 ```javascript
 {
+  _id: '123',
   username: 'bigjoe',
   email: 'bigjoe@mail.com',
   password: 'aodoiasjdoasijdioasljdoiasjd',
@@ -111,8 +119,8 @@ Example:
 ```
 {
   _id: ID,
-  path: String,
-  filename: String
+  publicId: String,
+  url: String
 }
 ```
 
@@ -121,8 +129,8 @@ Example:
 ```javascript
 {
   _id: 123,
-  path: '/link/to/image.png',
-  filename: 'image.png'
+  publicId: 'some-public-id',
+  filename: 'https://link.to.image',
 }
 ```
 
@@ -166,8 +174,8 @@ Example:
 
 ```
 {
-  path: String,
-  filename: String
+  publicId: String,
+  url: String
 }
 ```
 
@@ -175,8 +183,8 @@ Example:
 
 ```javascript
 {
-  path: '/link/to/image.png',
-  filename: 'image.png'
+  publicId: 'some-public-id',
+  url: 'https://link.to.image',
 }
 ```
 
@@ -239,7 +247,7 @@ query petList(
       name
       breed
       images {
-        path
+        url
       }
     }
   }
@@ -260,9 +268,9 @@ query petList(
         name: 'Nana',
         breed: 'Terrier',
         images: [
-          { path: '/link/to/image01.png' },
-          { path: '/link/to/image02.png' },
-          { path: '/link/to/image03.png' },
+          { url: 'https://link.to.image01' },
+          { url: 'https://link.to.image02' },
+          { url: 'https://link.to.image03' },
         ]
       },
       {
@@ -270,9 +278,9 @@ query petList(
         name: 'Mike',
         breed: 'Poodle',
         images: [
-          { path: '/link/to/image01.png' },
-          { path: '/link/to/image02.png' },
-          { path: '/link/to/image03.png' },
+          { url: 'https://link.to.image01' },
+          { url: 'https://link.to.image02' },
+          { url: 'https://link.to.image03' },
         ]
       },
       {
@@ -280,9 +288,9 @@ query petList(
         name: 'Dusky',
         breed: 'Shepherd',
         images: [
-          { path: '/link/to/image01.png' },
-          { path: '/link/to/image02.png' },
-          { path: '/link/to/image03.png' },
+          { url: 'https://link.to.image01' },
+          { url: 'https://link.to.image02' },
+          { url: 'https://link.to.image03' },
         ]
       }
       // ...
@@ -308,8 +316,8 @@ query pet($_id: ID!) {
     health
     description
     images {
-      path
-      filename
+      publicId
+      url
     }
     author {
       email
@@ -334,9 +342,9 @@ query pet($_id: ID!) {
     preferHomeWithout: ['Other cats'],
     health: ['Vaccinated', 'Spayed/neutered'],
     images: [
-      { path: '/link/to/image01.png', filename: 'image01.png' },
-      { path: '/link/to/image02.png', filename: 'image02.png' },
-      { path: '/link/to/image03.png', filename: 'image03.png' }
+      { publicId: 'some-public-id', url: 'https://link.to.image01' },
+      { publicId: 'some-public-id', url: 'https://link.to.image02' },
+      { publicId: 'some-public-id', url: 'https://link.to.image03' },
     ],
     description: 'Nana is a good kid. She behaves well with your children to give them good memories.',
     author: {
@@ -383,7 +391,7 @@ query userPetList(
       name
       breed
       images {
-        path
+        url
       }
     }
   }
@@ -404,9 +412,9 @@ query userPetList(
         name: 'Nana',
         breed: 'Terrier',
         images: [
-          { path: '/link/to/image01.png' },
-          { path: '/link/to/image02.png' },
-          { path: '/link/to/image03.png' },
+          { url: 'https://link.to.image01' },
+          { url: 'https://link.to.image02' },
+          { url: 'https://link.to.image03' },
         ]
       },
       {
@@ -414,9 +422,9 @@ query userPetList(
         name: 'Mike',
         breed: 'Poodle',
         images: [
-          { path: '/link/to/image01.png' },
-          { path: '/link/to/image02.png' },
-          { path: '/link/to/image03.png' },
+          { url: 'https://link.to.image01' },
+          { url: 'https://link.to.image02' },
+          { url: 'https://link.to.image03' },
         ]
       },
       {
@@ -424,9 +432,9 @@ query userPetList(
         name: 'Dusky',
         breed: 'Shepherd',
         images: [
-          { path: '/link/to/image01.png' },
-          { path: '/link/to/image02.png' },
-          { path: '/link/to/image03.png' },
+          { url: 'https://link.to.image01' },
+          { url: 'https://link.to.image02' },
+          { url: 'https://link.to.image03' },
         ]
       }
       // ...
@@ -535,76 +543,136 @@ mutation userChangePassword($oldPassword: String!, $newPassword: String!) {
 
 ## REST API
 
-### User registration
+### **User Registration**
+
+Register a new user.
+
+### Endpoint
 
 ```
-route: '/user/register',
-method: 'POST',
-'content-type': 'application/json',
-body: {
-  user: {
-    name: 'Joe Marcotti',
-    username: 'joe',
-    email: 'joe@mail.com',
-    password: 'password'
-  }
-}
+POST /user/register
 ```
 
-- Response
+### Parameters
 
-```javascript
+_No parameter._
+
+### Body
+
+Type: JSON
+
+- `user` **Required**  
+  Type: `Object`  
+  Default: {}  
+  User data.
+  - `name` **Required**  
+    Type: `String`  
+    Default: ''  
+    User's full name.
+  - `username` **Required**  
+    Type: `String`  
+    Default: ''  
+    User's username. It will be used for login.
+  - `email` **Required**  
+    Type: `String`  
+    Default: ''  
+    User's email.
+  - `password` **Required**  
+    Type: `String`  
+    Default: ''  
+    User's password.
+
+### Returns
+
+A newly registered user data.
+
+### Response Example
+
+```js
 {
   success: true,
   user: {
     name: 'Joe Marcotti',
     username: 'joe',
     email: 'joe@mail.com',
-    // Phone and address is empty upon first registration.
     phone: '',
-    address: ''
+    address: '',
   }
 }
 ```
 
-### User sign in
+### **User Login**
+
+Logs in a user.
+
+### Endpoint
 
 ```
-route: '/user/signin',
-method: 'POST',
-'content-type': 'application/json',
-body: {
-  username: 'BigJoe',
-  password: 'password',
-}
+POST /user/login
 ```
 
-- Response
+### Parameters
 
-```javascript
+_No parameter._
+
+### Body
+
+Type: JSON
+
+- `username` **Required**  
+  Type: `String`  
+  Default: ''  
+  User's username. It will be used for login.
+- `password` **Required**  
+  Type: `String`  
+  Default: ''  
+  User's password.
+
+### Returns
+
+Logged in user data.
+
+### Response Example
+
+```js
 {
   success: true,
   user: {
     name: 'Joe Marcotti',
     username: 'joe',
     email: 'joe@mail.com',
-    phone: '+1 2309 2994',
-    address: 'South Dakota'
+    phone: '',
+    address: '',
   }
 }
 ```
 
-### User sign out
+### **User Logout**
+
+Logs out a user.
+
+### Endpoint
 
 ```
-route: '/user/signout',
-method: 'POST',
+GET /user/logout
 ```
 
-- Response
+### Parameters
 
-```javascript
+_No parameter._
+
+### Body
+
+_No body._
+
+### Returns
+
+_No return._
+
+### Response Example
+
+```js
 {
-  success: true;
+  success: true,
 }
 ```

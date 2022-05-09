@@ -4,7 +4,7 @@ import { Formik, Field } from 'formik';
 
 import DataSource from '../store/DataSource';
 import actionTypes from '../store/actionTypes';
-import mutations from '../store/graphQLMutations';
+import mutations from '../store/graphqlMutations';
 import ChangePasswordSchema from '../helpers/yup/ChangePasswordSchema';
 import FormErrorMessage from '../FormErrorMessage';
 

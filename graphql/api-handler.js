@@ -12,9 +12,7 @@ const {
 } = require('./pet.js');
 const userResolver = require('./user.js');
 
-const { NODE_ENV, CORS_ORIGIN, CORS_CREDENTIALS, PORT } = process.env;
-
-const port = PORT || 3000;
+const { CORS_ORIGIN, CORS_CREDENTIALS } = process.env;
 
 function resolveContext({ req }) {
   return req.isAuthenticated()
@@ -24,13 +22,10 @@ function resolveContext({ req }) {
     : {};
 }
 
-const corsConfig =
-  NODE_ENV === 'development'
-    ? {
-        origin: [CORS_ORIGIN, /\.ngrok\.io/],
-        credentials: CORS_CREDENTIALS === 'true',
-      }
-    : { origin: false };
+const corsConfig = {
+  origin: CORS_ORIGIN,
+  credentials: CORS_CREDENTIALS === 'true',
+};
 
 const resolvers = {
   Query: {
@@ -62,9 +57,7 @@ async function startApolloServer(app) {
     cors: corsConfig,
   });
 
-  console.log(
-    `🚀 Apollo server ready at http://localhost:${port}${server.graphqlPath}`,
-  );
+  console.log(`Apollo server ready at ${server.graphqlPath}`);
 
   return server;
 }

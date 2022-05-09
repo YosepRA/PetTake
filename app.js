@@ -5,7 +5,6 @@ const cors = require('cors');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const logger = require('morgan');
-const history = require('connect-history-api-fallback');
 
 const path = require('path');
 
@@ -21,7 +20,6 @@ const userRouter = require('./routes/user.js');
 const app = express();
 
 const {
-  NODE_ENV,
   PORT,
   SESSION_SECRET,
   CORS_ORIGIN,
@@ -31,13 +29,10 @@ const {
 
 const port = PORT || 3000;
 
-const corsConfig =
-  NODE_ENV === 'development'
-    ? {
-        origin: [CORS_ORIGIN, /\.ngrok\.io/],
-        credentials: CORS_CREDENTIALS === 'true',
-      }
-    : { origin: false };
+const corsConfig = {
+  origin: CORS_ORIGIN,
+  credentials: CORS_CREDENTIALS === 'true',
+};
 
 let sessionSecret = SESSION_SECRET;
 
@@ -68,11 +63,6 @@ app.use(express.json());
 app.use(cors(corsConfig));
 app.use(session(sessionConfig));
 app.use(logger('dev'));
-
-if (NODE_ENV === 'production') {
-  app.use(history());
-  app.use(express.static(path.join(__dirname, './ui/build')));
-}
 
 app.use(express.static(path.join(__dirname, 'public')));
 

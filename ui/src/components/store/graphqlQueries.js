@@ -32,7 +32,7 @@ const queries = {
           name
           breed
           images {
-            path
+            url
           }
         }
       }
@@ -51,8 +51,8 @@ const queries = {
         health
         description
         images {
-          path
-          filename
+          publicId
+          url
         }
         author {
           email
@@ -93,7 +93,7 @@ const queries = {
           name
           breed
           images {
-            path
+            url
           }
         }
       }

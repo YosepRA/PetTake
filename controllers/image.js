@@ -25,7 +25,7 @@ module.exports = {
       url: img.secure_url,
     }));
 
-    return res.json({ succesS: true, data: uploadData });
+    return res.json({ success: true, data: uploadData });
   },
   async delete(req, res) {
     const { publicId } = req.body;
