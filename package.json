@@ -1,6 +1,6 @@
 {
   "name": "pettake",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Pet finder app built using MERN stack and GraphQL.",
   "main": "app.js",
   "scripts": {
