@@ -1,11 +1,8 @@
 import axios from 'axios';
 
-const { NODE_ENV, REACT_APP_API_ENDPOINT } = process.env;
+const { REACT_APP_API_ENDPOINT } = process.env;
 
-// Axios global defaults.
-if (NODE_ENV === 'development') {
-  axios.defaults.withCredentials = true;
-}
+axios.defaults.withCredentials = true;
 
 const API_ENDPOINT = REACT_APP_API_ENDPOINT || '';
 const GRAPHQL_ENDPOINT = `${API_ENDPOINT}/graphql`;
