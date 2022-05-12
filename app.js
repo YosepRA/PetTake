@@ -47,8 +47,10 @@ const sessionConfig = {
   secret: sessionSecret,
   saveUninitialized: false,
   resave: false,
-  sameSite: 'none',
-  secure: true,
+  cookie: {
+    sameSite: 'none',
+    secure: true,
+  },
   store: MongoStore.create({
     mongoUrl: MONGODB_URL,
     ttl: 7 * 24 * 60 * 60,
