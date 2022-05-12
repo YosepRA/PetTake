@@ -5,7 +5,7 @@ Random thoughts and concerns while on development. Finished items will have ✅ 
 ### New Features
 
 - Inter-page loading state.
-- Cloud storage implementation for image uploads. Or you can use Cloudinary too.
+- Cloud storage implementation for image uploads. Or you can use Cloudinary too. ✅
 - New pet form cancellation to also delete the uploaded images from Cloudinary. Stop the clutter!
 - Pet form loading state.
   - Image upload.
@@ -18,6 +18,8 @@ Random thoughts and concerns while on development. Finished items will have ✅ 
 
 ### Fix/Refactor
 
+- Client-side routing on production.
+- Change master branch to main.
 - Write documentation for REST endpoints.
 - Form button isSubmitting state.
 - Incorrect redirection to login page when cookie is still valid.  
