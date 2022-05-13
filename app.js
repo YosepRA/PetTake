@@ -20,6 +20,7 @@ const userRouter = require('./routes/user.js');
 const app = express();
 
 const {
+  NODE_ENV,
   PORT,
   SESSION_SECRET,
   CORS_ORIGIN,
@@ -48,14 +49,22 @@ const sessionConfig = {
   saveUninitialized: false,
   resave: false,
   cookie: {
-    sameSite: 'none',
-    secure: true,
+    sameSite: 'lax',
   },
   store: MongoStore.create({
     mongoUrl: MONGODB_URL,
     ttl: 7 * 24 * 60 * 60,
   }),
 };
+
+// if (NODE_ENV === 'development') {
+//   sessionConfig.cookie.sameSite = 'lax';
+// }
+
+// if (NODE_ENV === 'production') {
+//   sessionConfig.cookie.sameSite = 'none';
+//   sessionConfig.cookie.secure = true;
+// }
 
 const mongoUrl = MONGODB_URL;
 
