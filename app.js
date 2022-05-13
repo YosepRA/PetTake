@@ -49,7 +49,9 @@ const sessionConfig = {
   saveUninitialized: false,
   resave: false,
   cookie: {
-    sameSite: 'lax',
+    httpOnly: true,
+    path: '/',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   },
   store: MongoStore.create({
     mongoUrl: MONGODB_URL,
@@ -57,14 +59,12 @@ const sessionConfig = {
   }),
 };
 
-// if (NODE_ENV === 'development') {
-//   sessionConfig.cookie.sameSite = 'lax';
-// }
+if (NODE_ENV === 'production') {
+  sessionConfig.cookie.sameSite = 'none';
+  sessionConfig.cookie.secure = true;
+}
 
-// if (NODE_ENV === 'production') {
-//   sessionConfig.cookie.sameSite = 'none';
-//   sessionConfig.cookie.secure = true;
-// }
+console.log('Session config:', sessionConfig);
 
 const mongoUrl = MONGODB_URL;
 
