@@ -60,6 +60,7 @@ const sessionConfig = {
 };
 
 if (NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
   sessionConfig.cookie.sameSite = 'none';
   sessionConfig.cookie.secure = true;
 }
