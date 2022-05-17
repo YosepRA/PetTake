@@ -92,7 +92,6 @@ router.post('/login', authenticateLogin, (req, res) => {
 
 router.get('/logout', (req, res) => {
   req.logout();
-  res.clearCookie('connect.sid');
   res.json({ success: true });
 });
 

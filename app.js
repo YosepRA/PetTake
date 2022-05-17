@@ -65,8 +65,6 @@ if (NODE_ENV === 'production') {
   sessionConfig.cookie.secure = true;
 }
 
-console.log('Session config:', sessionConfig);
-
 const mongoUrl = MONGODB_URL;
 
 mongoConnect(mongoUrl);
