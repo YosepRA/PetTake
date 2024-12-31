@@ -2,6 +2,21 @@
 
 Pet finder app built using MERN stack and GraphQL.
 
+---
+
+### *Repository Discontinued*
+
+PetTake monorepo is now discontinued. The project is now split between `server` and `ui`, and both of them will be further developed from there onwards. Here are the following repositories for each new apps.
+
+1. PetTake Server  
+https://github.com/YosepRA/pettake-server
+2. PetTake Web UI  
+https://github.com/YosepRA/pettake-web-ui
+
+Thank you for your attention and have a nice day.
+
+---
+
 ### Environment Variables
 
 #### Production:
